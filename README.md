@@ -3,11 +3,11 @@
 pws link in here
 
 ## Nama-nama anggota kelompok
-2306210714 – Ilham Satya Nusabhakti
-2306202132 – Fadhlurohman Dzaki
-2306226731 – Muhammad Fakhri
-2306245491 – Rizki Hidayatul Laeli
-2306208810 – Theresia Tarianingsih
+1. 2306210714 – Ilham Satya Nusabhakti
+2. 2306202132 – Fadhlurohman Dzaki
+3. 2306226731 – Muhammad Fakhri
+4. 2306245491 – Rizki Hidayatul Laeli
+5. 2306208810 – Theresia Tarianingsih
 
 ## Deskripsi aplikasi 
 Sajiwara adalah platform web yang membawa pengunjung webnya untuk berbagi pengalaman kuliner di berbagai tempat makan, khususnya di Jogjakarta. Lebih dari sekadar situs review restoran kuliner saja, Sajiwara memberikan fasilitas untuk menuju petualangan kuliner Jogjakarta. Dari angkringan legendaris hingga kafe modern, Sajiwara membawa Anda menjelajahi setiap sudut Jogja yang kaya akan cita rasa dan cerita. Dengan ulasan pengguna lain, Anda bisa dengan mudah menemukan tempat makan yang sesuai dengan selera, suasana, dan anggaran.
