@@ -1,6 +1,6 @@
 # Sajiwara
 ## Link Deployment
-pws link in here
+http://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/
 
 ## Nama-nama anggota kelompok
 1. 2306210714 – Ilham Satya Nusabhakti
