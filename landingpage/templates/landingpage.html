@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{%extends 'base.html'%}
 {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sajiwara Landing Page</title>
-    <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
-</head>
-<body>
-
+{%block content%}
     <!-- Navbar -->
     {% include 'navbar.html' %}
 
@@ -17,7 +9,7 @@
         <div class="container mx-auto flex flex-col justify-center items-center h-full">
             <h1 class="text-5xl font-bold text-white mb-4">Welcome to Sajiwara</h1>
             <p class="text-lg text-white mb-6">Explore the best culinary experiences in Medan!</p>
-            <a href="{% url 'explore' %}" class="bg-orange-600 text-white py-3 px-6 rounded-lg hover:bg-orange-700">
+            <a href="" class="bg-orange-600 text-white py-3 px-6 rounded-lg hover:bg-orange-700">
                 Explore Now
             </a>
         </div>
@@ -49,7 +41,7 @@
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold text-white mb-8">Ready to Explore?</h2>
             <p class="text-white text-lg mb-8">Find your next meal with Sajiwara!</p>
-            <a href="{% url 'signup' %}" class="bg-white text-orange-600 py-3 px-6 rounded-lg font-bold hover:bg-gray-200">
+            <a href="" class="bg-white text-orange-600 py-3 px-6 rounded-lg font-bold hover:bg-gray-200">
                 Sign Up Now
             </a>
         </div>
@@ -61,6 +53,4 @@
             <p>&copy; 2024 Sajiwara. All Rights Reserved.</p>
         </div>
     </footer>
-
-</body>
-</html>
+{%endblock content%}
