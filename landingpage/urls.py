@@ -1,8 +1,12 @@
 from django.urls import path
-from landingpage.views import show_landingpage
-
-app_name = 'landingpage'
+from . import views
 
 urlpatterns = [
-    path('', show_landingpage, name='show_landingpage'),
+    path('', views.show_landingpage, name='show_landingpage'),
+    path('search/', views.search, name='search'),
+    path('explore/', views.explore, name='explore'),
+    path('add_wishlist/', views.add_wishlist, name='add_wishlist'),
+    path('add_review/', views.add_review, name='add_review'),
+    path('logout/', views.logout, name='logout'),
+    path('login/', views.login, name='login'),
 ]

@@ -1,11 +1,10 @@
 <nav class="bg-white border-b-2 border-gray-200">
     <div class="container mx-auto flex justify-between items-center py-4">
-        <a href="{% url 'home' %}" class="flex items-center">
-            <img src="{% static 'images/image.png' %}" alt="Sajiwara Logo" class="w-10 h-auto mr-3">
-            <span class="text-orange-600 text-2xl font-bold">Sajiwara</span>
+        <a href="{% url 'landing_page' %}" class="flex items-center">
+            <img src="{% static 'Sajiwara Logo.png' %}" alt="Sajiwara Logo" class="w-10 h-auto mr-3">
         </a>
         <ul class="flex space-x-6 text-orange-600 font-medium">
-            <li><a href="{% url 'home' %}" class="hover:text-orange-800">Home</a></li>
+            <li><a href="{% url 'landing_page' %}" class="hover:text-orange-800">Home</a></li>
             <li><a href="{% url 'search' %}" class="hover:text-orange-800">Search</a></li>
             <li><a href="{% url 'explore' %}" class="hover:text-orange-800">Explore Makanan</a></li>
             <li><a href="{% url 'add_wishlist' %}" class="hover:text-orange-800">Add Wishlist</a></li>
