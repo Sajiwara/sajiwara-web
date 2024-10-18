@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 @csrf_exempt
 def login(request):
@@ -54,6 +56,18 @@ def show_landingpage(request):
     }
 
     return render(request, "landingpage.html", context)
+
+def register(request):
+    form = UserCreationForm() 
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('landingpage:show_landingpage')
+    context = {'form':form}
+    return render(request, 'register.html', context)
 
 def search(request):
     return render(request, 'search.html')
