@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist Restoran</title>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+</head>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %} 
+
+<h1>Wishlist Restoran</h1>
+
+{% if not wishlist_restaurants and not visited_restaurants%}
+<p>Belum ada data restoran yang sudah kamu inginkan dan kamu kunjungi</p>
+{% else %}
+<p>Wishlist Restoran</p>
+<table>
+    <tr>
+        <th>Nama Restoran</th>
+        <th>Status</th>
+    </tr>
+
+    {%for resto_entry in wishlist_restaurants%}
+    <tr>
+        {% if resto_entry.wanted_resto == True %}
+        <td>{{resto_entry.restaurant}}</td>
+        {%if resto_entry.visited == False%}
+            <td>Belum Dikunjungi</td>
+        {% else %}
+        <td>Telah Dikunjungi</td>
+        {%endif%}
+        <td>
+            {% if not resto_entry.visited %}
+                <a href="{% url 'wishlistresto:visited_resto' resto_entry.pk %}">Tandai Sebagai Dikunjungi</a>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'wishlistresto:delete_wishlist' resto_entry.pk %}">Hapus Wishlist</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Restoran telah Dikunjungi</p>
+<table>
+    <tr>
+        <th>Nama Restoran</th>
+        <th>Edit Kunjungan</th>
+    </tr>
+
+    {%for resto_entry in wishlist_restaurants%}
+    <tr>
+        {% if resto_entry.visited %}
+        <td>{{resto_entry.restaurant}}</td>
+        {% endif %}
+        <td>
+            {% if resto_entry.visited %}
+                <a href="{% url 'wishlistresto:not_visited_resto' resto_entry.pk %}">Batalkan Kunjungi</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'wishlistresto:add_to_wishlist' %}">
+    <button>Add Wishlist</button>
+  </a>
+{% endblock content %}
+
+
+{% comment %} 
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Cari</button>
+</form>
+
+{% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>  <!-- Menampilkan pesan kesalahan -->
+{% endif %}
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Nama Restoran</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resto in restoran %}
+        <tr>
+            <td>{{ resto.restaurant }}</td>
+            <td>{{ resto.visited|yesno:"Telah Dikunjungi,Tidak Dikunjungi" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">Tidak ada restoran yang ditemukan.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+<h2>Wishlist (Belum Dikunjungi)</h2>
+<table>
+    <tr>
+        <th>Nama Restoran</th>
+        <th>Aksi</th>
+    </tr>
+    {% for resto in wishlist_restaurants %}
+    <tr>
+        <td>{{ resto.restaurant }}</td>
+        <td>
+            <a href="?mark_visited={{ resto.id }}">Mark as Visited</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Restoran yang Sudah Dikunjungi</h2>
+<table>
+    <tr>
+        <th>Nama Restoran</th>
+    </tr>
+    {% for resto in visited_restaurants %}
+    <tr>
+        <td>{{ resto.restaurant }}</td>
+    </tr>
+    {% endfor %}
+</table> 
+{% endblock content %}  {% endcomment %}
