@@ -3,14 +3,15 @@
 <nav class="bg-white border-b-2 border-gray-200">
     <div class="container mx-auto flex justify-between items-center py-4">
         <a href="{% url 'landingpage:show_landingpage' %}" class="flex items-center">
-            <img src="{% static 'image/Sajiwara_Logo.png' %}" alt="Sajiwara Logo" class="w-10 h-auto mr-3">
+            <img src="{% static 'image/Sajiwara_Logo.png' %}" alt="Sajiwara Logo" class="w-32 h-auto mr-3">
         </a>
         <ul class="flex space-x-6 text-orange-600 font-medium">
             <li><a href="{% url 'landingpage:show_landingpage' %}" class="hover:text-orange-800">Home</a></li>
-            <li><a href="{% url 'landingpage:search' %}" class="hover:text-orange-800">Search</a></li>
-            <li><a href="{% url 'landingpage:explore' %}" class="hover:text-orange-800">Explore Makanan</a></li>
-            <li><a href="{% url 'landingpage:add_wishlist' %}" class="hover:text-orange-800">Add Wishlist</a></li>
-            <li><a href="{% url 'landingpage:add_review' %}" class="hover:text-orange-800">Add Review</a></li>
+            <li><a href="" class="hover:text-orange-800">Search</a></li>
+            <li><a href="" class="hover:text-orange-800">Explore Makanan</a></li>
+            <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800">Add Wishlist Resto</a></li>
+            <li><a href="" class="hover:text-orange-800">Add Wishlist Food</a></li>
+            <li><a href="" class="hover:text-orange-800">Add Review</a></li>
         </ul>
 
         <div>
