@@ -1,27 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<label for="nama">Nama Restoran: </label>
-<input type="text"><br>
+<!-- Navbar -->
+{% include 'navbar.html' %}
+<form method="GET" action="{% url 'search:show_search' %}">
+    {% csrf_token %}
+    <label for="nama">Nama Restoran: </label>
+    <input type="text" name="nama" value="{{ request.GET.nama }}"><br>
 
-<label for="jenis">Jenis Makanan: </label>
-<select>
-    <option value="" disabled selected>Pilih Jenis Makanan</option>
-    <option>Pilihan 1</option>
-    <option>Pilihan 2</option>
-    <option>Pilihan 3</option>
-</select><br>
+    <label for="jenis_makanan">Jenis Makanan: </label>
+    <select name="jenis_makanan">
+        <option value="any" {% if request.GET.jenis_makanan == "any" or not request.GET.jenis_makanan %}selected{% endif %}>Any</option>
+        <option value="indonesia" {% if request.GET.jenis_makanan == "indonesia" %}selected{% endif %}>Indonesia</option>
+        <option value="western" {% if request.GET.jenis_makanan == "western" %}selected{% endif %}>Western</option>
+        <option value="middle eastern" {% if request.GET.jenis_makanan == "middle eastern" %}selected{% endif %}>Middle Eastern</option>
+        <option value="japanese" {% if request.GET.jenis_makanan == "japanese" %}selected{% endif %}>Japanese</option>
+        <option value="chinese" {% if request.GET.jenis_makanan == "chinese" %}selected{% endif %}>Chinese</option>
+    </select><br>
 
-<label for="rating">Rating: </label>
-<select>
-    <option value="" disabled selected>Pilih Rating</option>
-    <option>bintang 0</option>
-    <option>bintang 1</option>
-    <option>bintang 2</option>
-    <option>bintang 3</option>
-    <option>bintang 4</option>
-    <option>bintang 5</option>
-</select>
+    <label for="rating">Rating: </label>
+    <select name="rating">
+        <option value="any" {% if request.GET.rating == "any" or not request.GET.rating %}selected{% endif %}>Any</option>
+        <option value="1" {% if request.GET.rating == "1" %}selected{% endif %}>Bintang 1-2</option>
+        <option value="2" {% if request.GET.rating == "2" %}selected{% endif %}>Bintang 2-3</option>
+        <option value="3" {% if request.GET.rating == "3" %}selected{% endif %}>Bintang 3-4</option>
+        <option value="4" {% if request.GET.rating == "4" %}selected{% endif %}>Bintang 4-5</option>
+    </select><br>
 
+    <!-- Tambahkan dropdown untuk memilih sorting -->
+    <label for="sort_by">Sort By: </label>
+    <select name="sort_by">
+        <option value="nama" {% if request.GET.sort_by == "nama" %}selected{% endif %}>Nama (A-Z)</option>
+        <option value="-nama" {% if request.GET.sort_by == "-nama" %}selected{% endif %}>Nama (Z-A)</option>
+        <option value="rating" {% if request.GET.sort_by == "rating" %}selected{% endif %}>Rating (Terndah-Tertinggi)</option>
+        <option value="-rating" {% if request.GET.sort_by == "-rating" %}selected{% endif %}>Rating (Tertinggi-Terendah)</option>
+    </select><br>
+
+    <button type="submit">Search</button>
+</form>
+
+<h2>Hasil Pencarian</h2>
+
+<ul>
+    {% if message %}
+        <li>{{ message }}</li>
+    {% elif restaurants %}
+        {% for restaurant in restaurants %}
+            <li>{{ restaurant.nama }} - {{ restaurant.jenis_makanan }} - Rating: {{ restaurant.rating }}</li>
+        {% endfor %}
+    {% endif %}
+</ul>
 
 {% endblock content %}

@@ -5,4 +5,4 @@ app_name = 'search'
 
 urlpatterns = [
     path('', show_search, name='show_search'),
-]
+]   
