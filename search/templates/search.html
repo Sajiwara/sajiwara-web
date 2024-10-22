@@ -1,140 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: inline-block;
-            width: 120px;
-            margin-right: 10px;
-        }
-        input, select, button {
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px 20px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .restaurant-list {
-            margin-top: 30px;
-        }
-        .restaurant-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-        .restaurant-item:hover {
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .highlight {
-            background-color: #fff3cd;
-            padding: 2px;
-        }
-        .rating-stars {
-            color: #ffd700;
-            font-size: 1.2em;
-        }
-        .empty-star {
-            color: #ccc;
-        }
-        .no-results {
-            padding: 20px;
-            text-align: center;
-            background-color: #f8f9fa;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Search Restaurants</h1>
+{% extends 'base.html' %}
+{% block content %}
 
-    <form action="/search" method="GET">
-        <div class="form-group">
-            <label for="restaurant-name">Restaurant Name:</label>
-            <input type="text" id="restaurant-name" name="name" 
-                   placeholder="Enter restaurant name" 
-                   value="{{ search_params.name }}"/>
-        </div>
+<label for="nama">Nama Restoran: </label>
+<input type="text"><br>
 
-        <div class="form-group">
-            <label for="food-type">Food Type:</label>
-            <select id="food-type" name="food_type">
-                <option value="">Select Food Type</option>
-                <option value="Chinese" {% if search_params.food_type == 'Chinese' %}selected{% endif %}>Chinese</option>
-                <option value="Indonesian" {% if search_params.food_type == 'Indonesian' %}selected{% endif %}>Indonesian</option>
-                <option value="Western" {% if search_params.food_type == 'Western' %}selected{% endif %}>Western</option>
-            </select>
-        </div>
+<label for="jenis">Jenis Makanan: </label>
+<select>
+    <option value="" disabled selected>Pilih Jenis Makanan</option>
+    <option>Pilihan 1</option>
+    <option>Pilihan 2</option>
+    <option>Pilihan 3</option>
+</select><br>
 
-        <div class="form-group">
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating">
-                <option value="">Select Rating</option>
-                {% for i in '12345'|make_list %}
-                    <option value="{{ i }}" {% if search_params.rating == i %}selected{% endif %}>
-                        {{ i }} Star{% if i != '1' %}s{% endif %}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
+<label for="rating">Rating: </label>
+<select>
+    <option value="" disabled selected>Pilih Rating</option>
+    <option>bintang 0</option>
+    <option>bintang 1</option>
+    <option>bintang 2</option>
+    <option>bintang 3</option>
+    <option>bintang 4</option>
+    <option>bintang 5</option>
+</select>
 
-        <div class="form-group">
-            <button type="submit">Search</button>
-            <button type="reset" onclick="window.location.href='/search'" style="background-color: #6c757d;">Reset</button>
-        </div>
-    </form>
 
-    <div class="restaurant-list">
-        <h2>Search Results:</h2>
-        {% if restaurants %}
-            {% for restaurant in restaurants %}
-                <div class="restaurant-item">
-                    <h3>{{ restaurant.nama }}</h3>
-                    <p>Food Type: {{ restaurant.jenis_makanan }}</p>
-                    <p>
-                        Rating: 
-                        <span class="rating-stars">
-                            {% with rating=restaurant.rating|floatformat:"0"|add:"0" %}
-                                {% for i in '12345'|make_list %}
-                                    {% if forloop.counter <= rating %}
-                                        ★
-                                    {% else %}
-                                        <span class="empty-star">★</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endwith %}
-                        </span>
-                        ({{ restaurant.rating }})
-                    </p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="no-results">
-                <p>No restaurants found matching your search criteria.</p>
-                <p>Try broadening your search or using fewer filters.</p>
-            </div>
-        {% endif %}
-    </div>
-</body>
-</html>
+{% endblock content %}
