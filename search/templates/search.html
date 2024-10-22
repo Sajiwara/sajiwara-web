@@ -3,52 +3,65 @@
 
 <!-- Navbar -->
 {% include 'navbar.html' %}
-<form method="GET" action="{% url 'search:show_search' %}">
-    {% csrf_token %}
-    <label for="nama">Nama Restoran: </label>
-    <input type="text" name="nama" value="{{ request.GET.nama }}"><br>
 
-    <label for="jenis_makanan">Jenis Makanan: </label>
-    <select name="jenis_makanan">
-        <option value="any" {% if request.GET.jenis_makanan == "any" or not request.GET.jenis_makanan %}selected{% endif %}>Any</option>
-        <option value="indonesia" {% if request.GET.jenis_makanan == "indonesia" %}selected{% endif %}>Indonesia</option>
-        <option value="western" {% if request.GET.jenis_makanan == "western" %}selected{% endif %}>Western</option>
-        <option value="middle eastern" {% if request.GET.jenis_makanan == "middle eastern" %}selected{% endif %}>Middle Eastern</option>
-        <option value="japanese" {% if request.GET.jenis_makanan == "japanese" %}selected{% endif %}>Japanese</option>
-        <option value="chinese" {% if request.GET.jenis_makanan == "chinese" %}selected{% endif %}>Chinese</option>
-    </select><br>
+<div class="container mx-auto mt-10">
+    <div class="form-style bg-white p-8 shadow-lg rounded-lg max-w-md mx-auto">
+        <form method="GET" action="{% url 'search:show_search' %}">
+            {% csrf_token %}
+            <label for="nama" class="block font-medium text-gray-700">Nama Restoran:</label>
+            <input type="text" name="nama" value="{{ request.GET.nama }}" class="mt-2 p-2 w-full border rounded-md"><br>
 
-    <label for="rating">Rating: </label>
-    <select name="rating">
-        <option value="any" {% if request.GET.rating == "any" or not request.GET.rating %}selected{% endif %}>Any</option>
-        <option value="1" {% if request.GET.rating == "1" %}selected{% endif %}>Bintang 1-2</option>
-        <option value="2" {% if request.GET.rating == "2" %}selected{% endif %}>Bintang 2-3</option>
-        <option value="3" {% if request.GET.rating == "3" %}selected{% endif %}>Bintang 3-4</option>
-        <option value="4" {% if request.GET.rating == "4" %}selected{% endif %}>Bintang 4-5</option>
-    </select><br>
+            <label for="jenis_makanan" class="block font-medium text-gray-700">Jenis Makanan:</label>
+            <select name="jenis_makanan" class="mt-2 p-2 w-full border rounded-md">
+                <option value="any" {% if request.GET.jenis_makanan == "any" or not request.GET.jenis_makanan %}selected{% endif %}>Any</option>
+                <option value="indonesia" {% if request.GET.jenis_makanan == "indonesia" %}selected{% endif %}>Indonesia</option>
+                <option value="western" {% if request.GET.jenis_makanan == "western" %}selected{% endif %}>Western</option>
+                <option value="middle eastern" {% if request.GET.jenis_makanan == "middle eastern" %}selected{% endif %}>Middle Eastern</option>
+                <option value="japanese" {% if request.GET.jenis_makanan == "japanese" %}selected{% endif %}>Japanese</option>
+                <option value="chinese" {% if request.GET.jenis_makanan == "chinese" %}selected{% endif %}>Chinese</option>
+            </select><br>
 
-    <!-- Tambahkan dropdown untuk memilih sorting -->
-    <label for="sort_by">Sort By: </label>
-    <select name="sort_by">
-        <option value="nama" {% if request.GET.sort_by == "nama" %}selected{% endif %}>Nama (A-Z)</option>
-        <option value="-nama" {% if request.GET.sort_by == "-nama" %}selected{% endif %}>Nama (Z-A)</option>
-        <option value="rating" {% if request.GET.sort_by == "rating" %}selected{% endif %}>Rating (Terndah-Tertinggi)</option>
-        <option value="-rating" {% if request.GET.sort_by == "-rating" %}selected{% endif %}>Rating (Tertinggi-Terendah)</option>
-    </select><br>
+            <label for="rating" class="block font-medium text-gray-700">Rating:</label>
+            <select name="rating" class="mt-2 p-2 w-full border rounded-md">
+                <option value="any" {% if request.GET.rating == "any" or not request.GET.rating %}selected{% endif %}>Any</option>
+                <option value="1" {% if request.GET.rating == "1" %}selected{% endif %}>Bintang 1-2</option>
+                <option value="2" {% if request.GET.rating == "2" %}selected{% endif %}>Bintang 2-3</option>
+                <option value="3" {% if request.GET.rating == "3" %}selected{% endif %}>Bintang 3-4</option>
+                <option value="4" {% if request.GET.rating == "4" %}selected{% endif %}>Bintang 4-5</option>
+            </select><br>
 
-    <button type="submit">Search</button>
-</form>
+            <!-- Dropdown sorting -->
+            <label for="sort_by" class="block font-medium text-gray-700">Sort By:</label>
+            <select name="sort_by" class="mt-2 p-2 w-full border rounded-md">
+                <option value="nama" {% if request.GET.sort_by == "nama" %}selected{% endif %}>Nama (A-Z)</option>
+                <option value="-nama" {% if request.GET.sort_by == "-nama" %}selected{% endif %}>Nama (Z-A)</option>
+                <option value="rating" {% if request.GET.sort_by == "rating" %}selected{% endif %}>Rating (Tertinggi)</option>
+                <option value="-rating" {% if request.GET.sort_by == "-rating" %}selected{% endif %}>Rating (Terendah)</option>
+            </select><br>
 
-<h2>Hasil Pencarian</h2>
+            <button type="submit" class="mt-4 w-full bg-orange-500 text-white py-2 rounded-md shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400">Search</button>
+        </form>
+    </div>
 
-<ul>
-    {% if message %}
-        <li>{{ message }}</li>
-    {% elif restaurants %}
-        {% for restaurant in restaurants %}
-            <li>{{ restaurant.nama }} - {{ restaurant.jenis_makanan }} - Rating: {{ restaurant.rating }}</li>
-        {% endfor %}
+    <!-- Tampilkan hasil pencarian atau pesan default -->
+    {% if request.GET.nama or request.GET.jenis_makanan or request.GET.rating %}
+        <h2 class="text-center text-2xl font-bold mt-10">Hasil Pencarian</h2>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {% if message %}
+                <li class="col-span-full text-center text-lg text-gray-500">{{ message }}</li>
+            {% elif restaurants %}
+                {% for restaurant in restaurants %}
+                    <li class="bg-white p-6 shadow-lg rounded-lg">
+                        <h3 class="text-xl font-semibold">{{ restaurant.nama }}</h3>
+                        <p class="text-gray-700">{{ restaurant.jenis_makanan }}</p>
+                        <p class="text-yellow-500">Rating: {{ restaurant.rating }}</p>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    {% else %}
+        <p class="text-center text-xl text-gray-500 mt-10">Mau makan apa?</p>
     {% endif %}
-</ul>
+</div>
 
 {% endblock content %}
