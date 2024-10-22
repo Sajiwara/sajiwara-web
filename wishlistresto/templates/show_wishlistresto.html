@@ -13,12 +13,14 @@
 {% block content %}
 {% include 'navbar.html' %} 
 
-<h1>Wishlist Restoran</h1>
-
-{% if not wishlist_restaurants and not visited_restaurants%}
+{% comment %} {% if not wishlist_restaurants and not visited_restaurants%}
+<p>Belum ada data restoran yang sudah kamu inginkan dan kamu kunjungi</p>
+{% else %} {% endcomment %}
+{% comment %} TODO: ERROR {% endcomment %}
+{% if not wishlist_restaurants.exists and not visited_restaurants.exists %}
 <p>Belum ada data restoran yang sudah kamu inginkan dan kamu kunjungi</p>
 {% else %}
-<p>Wishlist Restoran</p>
+<h1 class="text-center text-3xl text-orange-700 font-bold">Wishlist Restoran</h1>
 <table>
     <tr>
         <th>Nama Restoran</th>
@@ -47,7 +49,7 @@
     {% endfor %}
 </table>
 
-<p>Restoran telah Dikunjungi</p>
+<h1 class="text-center text-3xl text-orange-700 font-bold">Restoran telah Dikunjungi</h1>
 <table>
     <tr>
         <th>Nama Restoran</th>
