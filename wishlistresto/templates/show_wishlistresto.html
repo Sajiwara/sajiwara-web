@@ -30,7 +30,7 @@
     {%for resto_entry in wishlist_restaurants%}
     <tr>
         {% if resto_entry.wanted_resto == True %}
-        <td>{{resto_entry.restaurant}}</td>
+        <td>{{resto_entry.restaurant_wanted}}</td>
         {%if resto_entry.visited == False%}
             <td>Belum Dikunjungi</td>
         {% else %}
@@ -59,7 +59,7 @@
     {%for resto_entry in wishlist_restaurants%}
     <tr>
         {% if resto_entry.visited %}
-        <td>{{resto_entry.restaurant}}</td>
+        <td>{{resto_entry.restaurant_wanted}}</td>
         {% endif %}
         <td>
             {% if resto_entry.visited %}
