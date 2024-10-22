@@ -25,4 +25,4 @@ def makanan_list(request):
     context = {
         'makanan_by_preferensi': makanan_by_preferensi
     }
-    return render(request, 'makanan_list.html', context)
+    return render(request, 'makanan_list.html', {'makanan_by_preferensi': makanan_by_preferensi})
