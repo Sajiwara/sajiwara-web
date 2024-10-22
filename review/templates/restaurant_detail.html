@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{%load static%}
+
+{% block meta %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Reviews</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<body class="bg-gray-100 h-screen">
+    <div class="w-[87.5%] mx-auto h-full mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h1 class="text-4xl font-bold text-center p-4">{{ restaurant.restaurant }}</h1>
+        <div class="flex justify-center mt-4 text-xl">
+            <span class="text-yellow-500">★</span>
+            <span class="text-black ml-1">{{ restaurant.rating }}/5.0</span>
+        </div>
+        <div class="mt-16 justify-center text-center">
+            <p class="text-gray-600">Here you can add more details about the restaurant, such as reviews, location, and more!</p>
+        </div>
+    </div>
+</body>
+{% endblock content %}

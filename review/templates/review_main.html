@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{%load static%}
+
+{% block meta %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Reviews</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div id="ilham_h1" class="flex justify-center text-orange-500 p-16">
+    <h1>Restaurant Reviews</h1>
+</div>
+
+{% if not restaurants %}
+<div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+    <p class="text-center text-gray-600 mt-4">Belum ada data restoran.</p>
+</div>
+{% else %}
+<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full p-2">
+    {% for restaurant in restaurants %}
+        {% include 'card_restaurant.html' with restaurant=restaurant %}
+    {% endfor %}
+</div>
+{% endif %}
+
+
+{% endblock content %}
+

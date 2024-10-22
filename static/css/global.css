@@ -18,3 +18,16 @@
     background-size: 200% 100%;
     animation: shine 3s infinite;
 }
+
+#ilham_h1{
+    font-size: x-large;
+    font-weight: bold;
+    justify-content: center;  /* Centers horizontally */
+}
+.ilham_centered_content {
+    display: flex;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    justify-content: center;   /* Centers horizontally */
+    text-align: center;
+}

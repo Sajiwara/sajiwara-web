@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'landingpage',
     'authentication',
     'wishlistresto',
+    'review',
 ]
 
 MIDDLEWARE = [
