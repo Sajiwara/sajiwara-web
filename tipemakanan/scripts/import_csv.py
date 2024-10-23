@@ -12,11 +12,12 @@ def runtipemakanan():
             for row in read:
                 preferensi = row['Preferensi Makanan'].strip()
                 variasi = row['Variasi Makanan'].strip()
+                restoran = row['Nama Restoran'].strip()
 
                 # Cek apakah preferensi makanan sudah ada
-                if not Makanan.objects.filter(preferensi=preferensi, menu=variasi).exists():
+                if not Makanan.objects.filter(preferensi=preferensi, menu=variasi, restoran=restoran).exists():
                     # Jika belum, buat instance baru dan simpan
-                    makanan_obj = Makanan(preferensi=preferensi, menu=variasi)
+                    makanan_obj = Makanan(preferensi=preferensi, menu=variasi, restoran=restoran)
                     makanan_obj.save()
                     print(f"Saved: {makanan_obj}")  # Print untuk konfirmasi penyimpanan
                 else:
