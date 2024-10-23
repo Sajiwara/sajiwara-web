@@ -1,6 +1,8 @@
+import json
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.core import serializers
 
 # Create your models here.
 class Resto(models.Model):
@@ -16,3 +18,9 @@ class WishlistResto(models.Model):
     visited = models.BooleanField(default=False) 
     def __str__(self):
         return f"{self.restaurant_wanted}"
+    
+    def show_wishlist():
+        all_wishlist = WishlistResto.objects.all()
+        json_data = serializers.serialize('json', all_wishlist)
+
+        print(json.dumps(json.loads(json_data), indent=4))
