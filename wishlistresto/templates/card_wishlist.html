@@ -1,0 +1,26 @@
+<div class="relative w-full h-48  p-6 shadow-lg rounded-lg mr-10 ml-10 rounded-3xl bg-white overflow-hidden  border-2 border-orange-100">
+      <div class="relative inset-x-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-3">
+        {%if resto_entry.visited == False%}
+            <div class="text-center flex flex-col">
+                <b class="text-xl text-orange-700">{{resto_entry.restaurant_wanted}}</b>
+                <div class="text-lg text-[#983b13cc]">Belum dikunjungi</div>
+            </div>
+        {% else %}
+            <div class="text-center flex flex-col">
+                <b class="text-xl text-orange-700">{{resto_entry.restaurant_wanted}}</b>
+                <div class="text-lg text-[#983b13cc]">Telah dikunjungi</div>
+            </div>
+        {%endif%}
+          
+          <div class="flex space-x-4">
+            {% if not resto_entry.visited %}
+              <div class="bg-[#ff611d] p-2 rounded-md text-white text-sm">
+                    <a href="{% url 'wishlistresto:visited_resto' resto_entry.pk%}">Tandai Sebagai Dikunjungi</a>
+              </div>
+            {% endif %}
+              <div class="bg-[#f82a2a] p-2 rounded-md text-white text-sm">
+                    <a href="{% url 'wishlistresto:delete_wishlist' resto_entry.pk%}">Hapus Wishlist</a>
+              </div>
+          </div>
+      </div>
+</div>

@@ -16,7 +16,11 @@
 
         <div>
             {% if user.is_authenticated %}
-                <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</a>
+                <div class="flex items-center space-x-2">
+                    <img src="{% static 'image/User.png' %}" alt="User" class="w-8 h-auto">
+                    <span class="text-yellow-600 mr-4 ml-4">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</a>
+                </div>
             {% else %}
                 <a href="{% url 'landingpage:login' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Login</a>
             {% endif %}
