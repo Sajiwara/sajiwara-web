@@ -57,7 +57,7 @@ def add_to_wishlist(request):
 
 # @csrf_exempt
 # @require_POST
-# def add_to_wishlist(request):
+# def add_to_wishlist(request): #ajax
 #     # form = SearchRestoForm(request.POST or None)
 #     resto = request.POST.get('restaurant')
 #     user = request.user

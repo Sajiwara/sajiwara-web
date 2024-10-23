@@ -21,17 +21,16 @@
     </a>
 </div>
 
-{% if wishlist_restaurants.length == 0 and visited_restaurants.length == 0 %}
+{% if not wishlist_restaurants.is_exist and not visited_restaurants.is_exist %}
     <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
         <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-        <p class="text-center text-gray-600 mt-4">Belum ada wishlist retoran yang kamu tambahkan dan kamu kunjungi.</p>
+        <p class="text-center text-gray-600 mt-4">Belum ada wishlist restoran yang kamu tambahkan dan kamu kunjungi.</p>
     </div>
 {% else %}
 <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
     {% for resto_entry in wishlist_restaurants %}
         {% include 'card_wishlist.html' with resto_entry=resto_entry %}
     {% endfor %}
-{% endif %} 
 </div>
 
 <p class="items-center text-center text-2xl text-orange-700 font-bold">Restoran yang Telah Dikunjungi</p>
@@ -42,6 +41,7 @@
         {% endif %}
     {% endfor %}
 </div>
+{% endif %} 
 
 {% comment %} <div id="wishlist_resto_cards"></div> {% endcomment %}
 
