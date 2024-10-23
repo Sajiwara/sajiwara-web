@@ -1,32 +1,26 @@
-<div class="container mx-auto p-8">
-    <h1 class="text-center text-3xl text-orange-700 font-bold mb-8">Wishlist Restoran</h1>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for resto_entry in wishlist_restaurants %}
-            {% if resto_entry.wanted_resto == True %}
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-orange-700 mb-2">{{ resto_entry.restaurant }}</h2>
-                    <p class="mb-4">
-                        {% if resto_entry.visited == False %}
-                            <span class="text-gray-600">Status: Belum Dikunjungi</span>
-                        {% else %}
-                            <span class="text-green-600">Status: Telah Dikunjungi</span>
-                        {% endif %}
-                    </p>
-                    
-                    <div class="flex justify-between items-center">
-                        {% if not resto_entry.visited %}
-                            <a href="{% url 'wishlistresto:visited_resto' resto_entry.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Tandai Sebagai Dikunjungi
-                            </a>
-                        {% endif %}
-                        
-                        <a href="{% url 'wishlistresto:delete_wishlist' resto_entry.pk %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            Hapus Wishlist
-                        </a>
-                    </div>
-                </div>
+<div class="relative w-full h-48  p-6 shadow-lg rounded-lg rounded-3xl bg-white overflow-hidden">
+      <div class="relative inset-x-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-3">
+        {%if resto_entry.visited == False%}
+            <div class="text-center flex flex-col">
+                <b class="text-xl text-orange-700">{{resto_entry.restaurant_wanted}}</b>
+                <div class="text-lg text-[#983b13cc]">Belum dikunjungi</div>
+            </div>
+        {% else %}
+            <div class="text-center flex flex-col">
+                <b class="text-xl text-orange-700">{{resto_entry.restaurant_wanted}}</b>
+                <div class="text-lg text-[#983b13cc]">Telah dikunjungi</div>
+            </div>
+        {%endif%}
+          
+          <div class="flex space-x-4">
+            {% if not resto_entry.visited %}
+              <div class="bg-[#ff611d] p-2 rounded-md text-white text-sm">
+                    <a href="{% url 'wishlistresto:visited_resto' resto_entry.pk%}">Tandai Sebagai Dikunjungi</a>
+              </div>
             {% endif %}
-        {% endfor %}
-    </div>
+              <div class="bg-[#f82a2a] p-2 rounded-md text-white text-sm">
+                    <a href="{% url 'wishlistresto:delete_wishlist' resto_entry.pk%}">Hapus Wishlist</a>
+              </div>
+          </div>
+      </div>
 </div>

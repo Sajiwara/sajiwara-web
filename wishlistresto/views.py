@@ -1,10 +1,12 @@
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from .models import Resto, WishlistResto
 from .forms import SearchRestoForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.core import serializers
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -17,6 +19,16 @@ def show_wishlistresto(request):
         'visited_restaurants': visited_restaurants,
     }
     return render(request, 'show_wishlistresto.html', context)
+
+# @csrf_exempt
+# @login_required(login_url='/login')
+# def show_wishlistresto(request):
+   
+#     context = {
+#    }
+#     return render(request, 'show_wishlistresto.html', context)
+
+
 
 @csrf_exempt
 def add_to_wishlist(request):
@@ -43,6 +55,17 @@ def add_to_wishlist(request):
     context = {'form': form}
     return render(request, "add_to_wishlist.html", context)
 
+# @csrf_exempt
+# @require_POST
+# def add_to_wishlist(request):
+#     # form = SearchRestoForm(request.POST or None)
+#     resto = request.POST.get('restaurant')
+#     user = request.user
+    
+#     wanted = WishlistResto(restaurant_wanted = resto, user = user, wanted_resto = True)
+#     wanted.save()
+#     return HttpResponse(b"CREATED", status=201)
+
 @csrf_exempt
 def visited_resto(request, id):
     resto = get_object_or_404(WishlistResto, pk=id, user=request.user)  # Get restaurant for the user
@@ -63,3 +86,7 @@ def delete_wishlist(request, id):
     resto.wanted_resto = False
     resto.save()
     return HttpResponseRedirect(reverse('wishlistresto:show_wishlistresto'))
+
+def show_json(request):
+    data = WishlistResto.objects.filter(user=request.user, wanted_resto=True)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")

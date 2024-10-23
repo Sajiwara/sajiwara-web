@@ -13,70 +13,67 @@
 {% block content %}
 {% include 'navbar.html' %} 
 
-{% comment %} {% if not wishlist_restaurants and not visited_restaurants%}
-<p>Belum ada data restoran yang sudah kamu inginkan dan kamu kunjungi</p>
-{% else %} {% endcomment %}
-{% comment %} TODO: ERROR {% endcomment %}
-{% if not wishlist_restaurants.exists and not visited_restaurants.exists %}
-<p>Belum ada data restoran yang sudah kamu inginkan dan kamu kunjungi</p>
+<p class="items-center text-center text-2xl text-orange-700 font-bold">Daftar Wishlist Restoran</p>
+<p></p>
+<div class="items-center">
+    <a href="{% url 'wishlistresto:add_to_wishlist' %}" class="items-center">
+        <button class="bg-[#ff611d] p-2 rounded-md text-white text-sm">Add Wishlist</button>
+    </a>
+</div>
+
+{% if wishlist_restaurants.length == 0 and visited_restaurants.length == 0 %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+        <p class="text-center text-gray-600 mt-4">Belum ada wishlist retoran yang kamu tambahkan dan kamu kunjungi.</p>
+    </div>
 {% else %}
-<h1 class="text-center text-3xl text-orange-700 font-bold">Wishlist Restoran</h1>
-<table>
-    <tr>
-        <th>Nama Restoran</th>
-        <th>Status</th>
-    </tr>
-
-    {%for resto_entry in wishlist_restaurants%}
-    <tr>
-        {% if resto_entry.wanted_resto == True %}
-        <td>{{resto_entry.restaurant_wanted}}</td>
-        {%if resto_entry.visited == False%}
-            <td>Belum Dikunjungi</td>
-        {% else %}
-        <td>Telah Dikunjungi</td>
-        {%endif%}
-        <td>
-            {% if not resto_entry.visited %}
-                <a href="{% url 'wishlistresto:visited_resto' resto_entry.pk %}">Tandai Sebagai Dikunjungi</a>
-            {% endif %}
-        </td>
-        <td>
-            <a href="{% url 'wishlistresto:delete_wishlist' resto_entry.pk %}">Hapus Wishlist</a>
-        </td>
-        {% endif %}
-    </tr>
+<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+    {% for resto_entry in wishlist_restaurants %}
+        {% include 'card_wishlist.html' with resto_entry=resto_entry %}
     {% endfor %}
-</table>
+{% endif %} 
+</div>
 
-<h1 class="text-center text-3xl text-orange-700 font-bold">Restoran telah Dikunjungi</h1>
-<table>
-    <tr>
-        <th>Nama Restoran</th>
-        <th>Edit Kunjungan</th>
-    </tr>
-
+<p class="items-center text-center text-2xl text-orange-700 font-bold">Restoran yang Telah Dikunjungi</p>
+<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
     {%for resto_entry in wishlist_restaurants%}
-    <tr>
-        {% if resto_entry.visited %}
-        <td>{{resto_entry.restaurant_wanted}}</td>
+        {%if resto_entry.visited == True%}
+            {% include 'card_dikunjungi.html' with resto_entry=resto_entry %}
         {% endif %}
-        <td>
-            {% if resto_entry.visited %}
-                <a href="{% url 'wishlistresto:not_visited_resto' resto_entry.pk %}">Batalkan Kunjungi</a>
-            {% endif %}
-        </td>
-    </tr>
     {% endfor %}
-</table>
-{% endif %}
+</div>
 
-<br />
+{% comment %} <div id="wishlist_resto_cards"></div> {% endcomment %}
 
-<a href="{% url 'wishlistresto:add_to_wishlist' %}">
-    <button>Add Wishlist</button>
-  </a>
+<br>
 {% endblock content %}
+{% comment %} 
+<script>
+    async function getWishlistResto(){
+        return fetch("{% url 'wishlistresto:show_json'%}").then((res) => res.json())
+    }
+
+    async function refreshWishlistResto() {
+        document.getElementById("wishlist_resto_cards").innerHTML = "";
+        document.getElementById("wishlist_resto_cards").className = "";
+        const restoEntries = await getWishlistResto();
+        let htmlString = "";
+        let classNameString = "";
+
+        if (restoEntries.length === 0){
+            classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+            htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">Belum ada wishlist retoran yang kamu tambahkan.</p>
+            </div>
+            `;
+        }
+        else{
+            classNameString = "relative w-full h-48 border-2 border-[#c15628] rounded-3xl bg-white overflow-hidden"
+        }
+    }
+</script> {% endcomment %}
 
 
 {% comment %} 
