@@ -6,6 +6,8 @@ from .models import Review
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import ReviewForm
+from django.contrib import messages
+
 # Create your views here.
 
 def show_main(request):
@@ -29,6 +31,11 @@ def restaurant_detail(request, id):
 
 def add_review(request, restaurant_id):
     restaurant = get_object_or_404(Restor, id=restaurant_id)  # Make sure the restaurant is correctly fetched
+
+    if not request.user.is_authenticated:
+        messages.warning(request, "You must be logged in to add a review.")
+        return redirect('landingpage:login')
+
     form = ReviewForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
@@ -46,6 +53,22 @@ def delete_review(request, review_id):
     review.delete()
     return redirect(request.META.get('HTTP_REFERER', reverse('review:show_main')))  # Redirect back
 
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
 
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)  # Prepopulate the form with the current review data
+        if form.is_valid():
+            form.save()  # Save the updated review
+            messages.success(request, "Your review has been updated successfully!")
+            return redirect('review:restaurant_detail', id=review.restaurant.id)
+    else:
+        form = ReviewForm(instance=review)  # Show the form with the existing review data
+
+    context = {
+        'form': form,
+        'review': review,
+    }
+    return render(request, 'add_review.html', context)
 
     
