@@ -1,6 +1,6 @@
 {%load static%}
 
-<nav class="bg-white border-b-2 border-gray-200">
+<nav class="bg-white border-b-2 border-gray-200 sticky top-0 z-50">
     <div class="container mx-auto flex justify-between items-center py-4">
         <a href="{% url 'landingpage:show_landingpage' %}" class="flex items-center">
             <img src="{% static 'image/Sajiwara_Logo.png' %}" alt="Sajiwara Logo" class="w-32 h-auto mr-3">
@@ -16,7 +16,11 @@
 
         <div>
             {% if user.is_authenticated %}
-                <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</a>
+                <div class="flex items-center space-x-2">
+                    <img src="{% static 'image/User.png' %}" alt="User" class="w-8 h-auto">
+                    <span class="text-yellow-600 mr-4 ml-4">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</a>
+                </div>
             {% else %}
                 <a href="{% url 'landingpage:login' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Login</a>
             {% endif %}
