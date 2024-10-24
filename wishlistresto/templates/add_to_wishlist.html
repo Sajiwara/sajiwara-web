@@ -1,26 +1,4 @@
 {% extends 'base.html' %}
-{% comment %} {% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
-{% include 'navbar.html' %} 
-<div class="flex justify-center items-center h-screen bg-orange-100 bg-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-center text-3xl text-orange-700 font-bold">Tambah Restoran ke Wishlist</h1>
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="text-center">
-                <button type="submit" class="bg-orange-500 text-white font-bold py-2 px-4 rounded mt-4">Tambah</button>
-            </div>
-        </form> 
-    </div>
-</div>
-
-
-{% endblock content %}  {% endcomment %}
-
-
 {% load static %}
 
 {% block content %}
