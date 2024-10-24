@@ -24,7 +24,14 @@ class MakananUpdateForm(forms.ModelForm):
             'restoran': 'Nama Restoran',
         }
         widgets = {
-            'preferensi': forms.TextInput(attrs={'class': 'form-control'}),
-            'menu': forms.TextInput(attrs={'class': 'form-control'}),
-            'restoran': forms.TextInput(attrs={'class': 'form-control'}),
+            'menu': forms.Textarea(attrs={
+                'rows': 5,  # Atur tinggi box dengan jumlah baris
+                'cols': 50,  # Atur lebar box
+                'class': 'form-control',
+            }),
         }
+        def __init__(self, *args, **kwargs):
+            super(MakananUpdateForm, self).__init__(*args, **kwargs)
+            # Membuat 'restoran' dan 'preferensi' menjadi readonly
+            self.fields['restoran'].widget.attrs['readonly'] = True
+            self.fields['preferensi'].widget.attrs['readonly'] = True
