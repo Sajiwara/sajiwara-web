@@ -1,0 +1,32 @@
+.centered-content {
+    text-align: center;
+    margin: 50px auto;
+}
+
+h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 3rem;
+    color: red;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+body {
+    background-color: #f7f7f7;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.navbar {
+    background-color: #444;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+h1:hover {
+    color: #007bff;
+}

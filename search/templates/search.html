@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Navbar -->
+{% include 'navbar.html' %}
+
+<div class="container mx-auto mt-10 min-h-screen">
+    <!-- Search Button to Open Modal -->
+    <div class="text-center">
+        <button id="openSearchModal" class="bg-orange-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            Cari Restoran
+        </button>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Cari Restoran</h2>
+                    <button id="closeSearchModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Search Form -->
+                <form id="searchForm" class="space-y-6">
+                    <!-- Nama Restoran -->
+                    <div>
+                        <label for="search-input" class="block text-sm font-medium text-gray-700">Nama Restoran</label>
+                        <input id="search-input" type="text" name="nama" class="mt-1 block w-full rounded-md border-2 border-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+                    </div>
+
+                    <!-- Filter Options -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Jenis Makanan -->
+                        <div>
+                            <label for="jenis_makanan" class="block text-sm font-medium text-gray-700">Jenis Makanan</label>
+                            <select name="jenis_makanan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                                <option value="any">Any</option>
+                                <option value="indonesia">Indonesia</option>
+                                <option value="western">Western</option>
+                                <option value="middle eastern">Middle Eastern</option>
+                                <option value="japanese">Japanese</option>
+                                <option value="chinese">Chinese</option>
+                            </select>
+                        </div>
+
+                        <!-- Rating -->
+                        <div>
+                            <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
+                            <select name="rating" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                                <option value="any">Any</option>
+                                <option value="0">Bintang < 1</option>
+                                <option value="1">Bintang 1-2</option>
+                                <option value="2">Bintang 2-3</option>
+                                <option value="3">Bintang 3-4</option>
+                                <option value="4">Bintang 4-5</option>
+                            </select>
+                        </div>
+
+                        <!-- Sort By -->
+                        <div>
+                            <label for="sort_by" class="block text-sm font-medium text-gray-700">Urutkan Berdasarkan</label>
+                            <select name="sort_by" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                                <option value="nama">Nama (A-Z)</option>
+                                <option value="-nama">Nama (Z-A)</option>
+                                <option value="rating">Rating (Terendah-Tertinggi)</option>
+                                <option value="-rating">Rating (Tertinggi-Terendah)</option>
+                                <option value="harga">Harga (Termurah-Termahal)</option>
+                                <option value="-harga">Harga (Termahal-Termurah)</option>
+                                <option value="jarak">Jarak (Terdekat-Terjauh)</option>
+                                <option value="-jarak">Jarak (Terjauh-Terdekat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="resetForm" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                            Reset
+                        </button>
+                        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
+                            Cari
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Container -->
+    <div id="searchResults" class="mt-10">
+        <p class="text-center text-xl text-gray-500">Mau makan apa hari ini?</p>
+    </div>
+</div>
+{% include 'footer.html' %}
+
+
+
+<script>
+    // Modal Elements
+    const modal = document.getElementById('searchModal');
+    const openModalBtn = document.getElementById('openSearchModal');
+    const closeModalBtn = document.getElementById('closeSearchModal');
+    const searchForm = document.getElementById('searchForm');
+    const resetFormBtn = document.getElementById('resetForm');
+
+    // Modal Functions
+    function openModal() {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Event Listeners
+    openModalBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Reset Form
+    resetFormBtn.addEventListener('click', () => {
+        searchForm.reset();
+    });
+
+    // AJAX Search Function
+    function performSearch(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(searchForm);
+        const queryString = new URLSearchParams(formData).toString();
+        
+        fetch(`{% url 'search:show_search' %}?${queryString}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('searchResults').innerHTML = data.html;
+            closeModal(); // Close modal after search
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Form Submit Event
+    searchForm.addEventListener('submit', performSearch);
+
+    const searchInput = document.getElementById('search-input');
+    const searchIcon = document.getElementById('search-icon');
+
+    function hideIcon() {
+        searchIcon.style.opacity = '0'; // Mengubah opacity menjadi 0
+        setTimeout(() => {
+            searchIcon.style.display = 'none'; // Menghilangkan ikon setelah transisi
+        }, 300); // Waktu yang sama dengan durasi transisi
+    }
+
+    function showIcon() {
+        searchIcon.style.display = 'flex'; // Menampilkan ikon
+        setTimeout(() => {
+            searchIcon.style.opacity = '1'; // Mengubah opacity menjadi 1
+        }, 0); // Waktu yang sama dengan durasi transisi
+    }
+
+    searchInput.addEventListener('click', hideIcon);
+    searchIcon.addEventListener('click', hideIcon);
+
+    searchInput.addEventListener('blur', function() {
+        if (searchInput.value === '') {
+            showIcon();
+        }
+    });
+
+    searchInput.addEventListener('input', function() {
+        if (searchInput.value === '') {
+            showIcon();
+        } else {
+            hideIcon();
+        }
+    });
+</script>
+
+{% endblock content %}

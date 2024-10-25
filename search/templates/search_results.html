@@ -1,0 +1,18 @@
+{% if restaurants or message or search_title %}
+    <h2 class="text-center text-2xl font-bold"> {{search_title}} </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {% if message %}
+            <div class="col-span-full text-center text-lg text-gray-500">
+                {{ message }}
+            </div>
+        {% else %}
+            {% for restaurant in restaurants %}
+                <div class="transform transition duration-300 hover:scale-105">
+                    {% include 'restocard.html' %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    
+{% endif %}
