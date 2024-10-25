@@ -2,16 +2,19 @@ from django.shortcuts import render
 from search.models import Restaurant
 from django.http import HttpResponse
 from django.core import serializers
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
 
 def show_search(request):
-    # Mendapatkan parameter dari URL (GET)
-    query_name = request.GET.get('nama')
-    query_jenis = request.GET.get('jenis_makanan')
-    query_rating = request.GET.get('rating')
-    sort_by = request.GET.get('sort_by', 'nama')  # Default sort by nama
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # Mendapatkan parameter dari URL (GET)
+        query_name = request.GET.get('nama')
+        query_jenis = request.GET.get('jenis_makanan')
+        query_rating = request.GET.get('rating')
+        sort_by = request.GET.get('sort_by', 'nama')
 
-    # Cek apakah ada input pencarian (salah satu filter digunakan)
-    if query_name or query_jenis or query_rating:
         restaurants = Restaurant.objects.all()
 
         if query_name:
@@ -19,7 +22,6 @@ def show_search(request):
         if query_jenis and query_jenis != "any":
             restaurants = restaurants.filter(jenis_makanan__icontains=query_jenis)
         if query_rating and query_rating != "any":
-            # Logika pencarian dalam rentang rating
             if query_rating == "1":
                 restaurants = restaurants.filter(rating__gte=1, rating__lt=2)
             elif query_rating == "2":
@@ -31,22 +33,74 @@ def show_search(request):
             elif query_rating == "0":
                 restaurants = restaurants.filter(rating__gte=0, rating__lte=1)
 
-
-        # Urutkan hasil pencarian berdasarkan pilihan pengguna
         if sort_by in ['nama', '-nama', 'rating', '-rating', 'harga', '-harga', 'jarak', '-jarak']:
             restaurants = restaurants.order_by(sort_by)
 
-        # Jika tidak ada restoran yang cocok, kirimkan pesan
-        if not restaurants.exists():
-            message = "Tidak ada data yang cocok"
-        else:
-            message = None
-    else:
-        # Jika belum ada pencarian, tidak menampilkan restoran
-        restaurants = None
-        message = "Mau makan apa hari ini?"
+        message = "Tidak ada data yang cocok" if not restaurants.exists() else None
 
-    return render(request, 'search.html', {'restaurants': restaurants, 'message': message})
+        # Tambahkan nama di message
+        search_title = f'Hasil Pencarian untuk "{query_name}"' if query_name else "Hasil Pencarian"
+
+
+        context = {
+            'restaurants': restaurants,
+            'message': message,
+            'search_title': search_title,
+        }
+
+        result_html = render_to_string('search_results.html', context)
+        return JsonResponse({
+            'html': result_html
+        })
+
+    return render(request, 'search.html')
+
+
+
+# def show_search(request):
+#     # Mendapatkan parameter dari URL (GET)
+#     query_name = request.GET.get('nama')
+#     query_jenis = request.GET.get('jenis_makanan')
+#     query_rating = request.GET.get('rating')
+#     sort_by = request.GET.get('sort_by', 'nama')  # Default sort by nama
+
+#     # Cek apakah ada input pencarian (salah satu filter digunakan)
+#     if query_name or query_jenis or query_rating:
+#         restaurants = Restaurant.objects.all()
+
+#         if query_name:
+#             restaurants = restaurants.filter(nama__icontains=query_name)
+#         if query_jenis and query_jenis != "any":
+#             restaurants = restaurants.filter(jenis_makanan__icontains=query_jenis)
+#         if query_rating and query_rating != "any":
+#             # Logika pencarian dalam rentang rating
+#             if query_rating == "1":
+#                 restaurants = restaurants.filter(rating__gte=1, rating__lt=2)
+#             elif query_rating == "2":
+#                 restaurants = restaurants.filter(rating__gte=2, rating__lt=3)
+#             elif query_rating == "3":
+#                 restaurants = restaurants.filter(rating__gte=3, rating__lt=4)
+#             elif query_rating == "4":
+#                 restaurants = restaurants.filter(rating__gte=4, rating__lte=5)
+#             elif query_rating == "0":
+#                 restaurants = restaurants.filter(rating__gte=0, rating__lte=1)
+
+
+#         # Urutkan hasil pencarian berdasarkan pilihan pengguna
+#         if sort_by in ['nama', '-nama', 'rating', '-rating', 'harga', '-harga', 'jarak', '-jarak']:
+#             restaurants = restaurants.order_by(sort_by)
+
+#         # Jika tidak ada restoran yang cocok, kirimkan pesan
+#         if not restaurants.exists():
+#             message = "Tidak ada data yang cocok"
+#         else:
+#             message = None
+#     else:
+#         # Jika belum ada pencarian, tidak menampilkan restoran
+#         restaurants = None
+#         message = "Mau makan apa hari ini?"
+
+#     return render(request, 'search.html', {'restaurants': restaurants, 'message': message})
 
 
 def show_xml(request):
