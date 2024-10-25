@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'landingpage',
     'search',
-
+    'wishlistmenu',
     'authentication',
     'wishlistresto',
 ]
