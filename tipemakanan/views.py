@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 def makanan_list(request):
     form = PreferensiForm(request.POST or None)
-    makanan_filtered = None
+    makanan_filtered = Makanan.objects.all()
     
     if request.method == 'POST' and form.is_valid():
         preferensi_terpilih = form.cleaned_data['preferensi']

@@ -29,6 +29,16 @@ class MakananUpdateForm(forms.ModelForm):
                 'cols': 50,  # Atur lebar box
                 'class': 'form-control',
             }),
+            'preferensi': forms.Textarea(attrs={
+                'rows': 1,  # Atur tinggi box dengan jumlah baris
+                'cols': 25,  # Atur lebar box
+                'class': 'form-control',
+            }),
+            'restoran': forms.Textarea(attrs={
+                'rows': 1,  # Atur tinggi box dengan jumlah baris
+                'cols': 50,  # Atur lebar box
+                'class': 'form-control',
+            }),
         }
         def __init__(self, *args, **kwargs):
             super(MakananUpdateForm, self).__init__(*args, **kwargs)
