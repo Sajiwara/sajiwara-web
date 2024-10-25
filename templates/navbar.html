@@ -1,25 +1,68 @@
-{%load static%}
+{% load static %}
 
-<nav class="bg-white border-b-2 border-gray-200">
-    <div class="container mx-auto flex justify-between items-center py-4">
-        <a href="{% url 'landingpage:show_landingpage' %}" class="flex items-center">
-            <img src="{% static 'image/Sajiwara_Logo.png' %}" alt="Sajiwara Logo" class="w-32 h-auto mr-3">
+<nav class="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-md">
+    <div class="container mx-auto flex justify-between items-center py-3">
+        
+        <!-- Logo Section -->
+        <a href="{% url 'landingpage:show_landingpage' %}" class="flex items-center space-x-2">
+            <img src="{% static 'image/Sajiwara_Logo.png' %}" alt="Sajiwara Logo" class="w-32 h-auto mr-3 hover:scale-105 transform transition duration-200">
         </a>
-        <ul class="flex space-x-6 text-orange-600 font-medium">
-            <li><a href="{% url 'landingpage:show_landingpage' %}" class="hover:text-orange-800">Home</a></li>
-            <li><a href="" class="hover:text-orange-800">Search</a></li>
-            <li><a href="" class="hover:text-orange-800">Explore Makanan</a></li>
-            <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800">Add Wishlist Resto</a></li>
-            <li><a href="" class="hover:text-orange-800">Add Wishlist Food</a></li>
-            <li><a href="" class="hover:text-orange-800">Add Review</a></li>
+        
+        <!-- Navigation Links -->
+        <ul class="hidden md:flex space-x-8 text-orange-600 font-semibold text-lg tracking-wide">
+            <li><a href="{% url 'landingpage:show_landingpage' %}" class="hover:text-orange-800 transition duration-200">Home</a></li>
+            <li><a href="{% url 'search:show_search' %}" class="hover:text-orange-800 transition duration-200">Search</a></li>
+            <li><a href="{% url 'tipemakanan:makanan_list' %}" class="hover:text-orange-800 transition duration-200">Explore Makanan</a></li>
+            <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800 transition duration-200">Add Wishlist Resto</a></li>
+            <li><a href="#" class="hover:text-orange-800 transition duration-200">Add Wishlist Food</a></li>
+            <li><a href="{% url 'review:show_main' %}" class="hover:text-orange-800 transition duration-200">See Reviews</a></li>
         </ul>
 
-        <div>
+        <!-- User Profile or Auth Links -->
+        <div class="flex items-center space-x-4">
             {% if user.is_authenticated %}
-                <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</a>
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-orange-200 border border-orange-300 flex items-center justify-center text-white font-bold text-lg">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <span class="text-orange-600 font-medium">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'landingpage:logout' %}" class="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition duration-200">
+                        Logout
+                    </a>
+                </div>
             {% else %}
-                <a href="{% url 'landingpage:login' %}" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Login</a>
+                <a href="{% url 'landingpage:login' %}" class="bg-orange-600 text-white py-1 px-4 rounded-lg hover:bg-orange-700 transition duration-200">
+                    Login
+                </a>
             {% endif %}
         </div>
+        
+        <!-- Mobile Menu Icon -->
+        <div class="md:hidden flex items-center">
+            <button id="mobile-menu-toggle" class="text-orange-600 hover:text-orange-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t-2 border-gray-200">
+        <ul class="flex flex-col space-y-4 py-4 px-6 text-orange-600 font-medium">
+            <li><a href="{% url 'landingpage:show_landingpage' %}" class="hover:text-orange-800">Home</a></li>
+            <li><a href="{% url 'search:show_search' %}" class="hover:text-orange-800">Search</a></li>
+            <li><a href="{% url 'tipemakanan:makanan_list' %}" class="hover:text-orange-800">Explore Makanan</a></li>
+            <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800">Add Wishlist Resto</a></li>
+            <li><a href="#" class="hover:text-orange-800">Add Wishlist Food</a></li>
+            <li><a href="{% url 'review:show_main' %}" class="hover:text-orange-800">See Reviews</a></li>
+        </ul>
     </div>
 </nav>
+
+<script>
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+</script>
