@@ -31,7 +31,17 @@
             {% for makanan in makanan_filtered %}
             <div class="bg-white p-6 shadow-lg rounded-lg">
                 <h2 class="text-xl font-semibold mb-4">{{ makanan.restoran }}</h2>
+                <p class="text-gray-600 mb-2">Preferensi: <strong>{{ makanan.preferensi }}</strong></p>
                 <p class="text-gray-700">{{ makanan.menu }}</p>
+                
+                <!-- Tampilkan tombol edit hanya jika user sudah login -->
+                {% if user.is_authenticated %}
+                <button data-modal-target="crudModal" data-modal-toggle="crudModal" 
+                        class="btn bg-orange-700 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg mt-4 block w-max transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" 
+                        onclick="openEditModal({{ makanan.pk }});">
+                    Edit
+                </button>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -41,5 +51,54 @@
 </div>
 
 
+<!-- Modal untuk Edit Makanan -->
+<div id="crudModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 font-bold text-xl">&times;</button>
+        <h2 class="text-2xl font-semibold mb-4">Edit Makanan</h2>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+
+<!-- JavaScript for AJAX and Modal -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function openEditModal(makananId) {
+        $.ajax({
+            url: '/tipemakanan/edit/' + makananId + '/',
+            type: 'GET',
+            success: function(response) {
+                $('#modalContent').html(response.form_html);
+                $('#crudModal').removeClass('hidden');
+            }
+        });
+    }
+
+    $('#modalContent').on('submit', '#editForm', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    closeModal();
+                    alert("Data berhasil diperbarui!");
+                    location.reload();  // Reload halaman untuk memperbarui daftar makanan
+                }
+            },
+            error: function() {
+                alert("Terjadi kesalahan, coba lagi.");
+            }
+        });
+    });
+
+    function closeModal() {
+        $('#crudModal').addClass('hidden');
+        $('#modalContent').empty();
+    }
+</script>
+{% include 'footer.html' %}
 
 {% endblock content %}

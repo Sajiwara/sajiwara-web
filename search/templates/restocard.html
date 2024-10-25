@@ -1,0 +1,27 @@
+{% load static %}
+<div class="bg-gray-200 p-6 shadow-lg rounded-lg">
+    <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold text-center w-full">{{ restaurant.nama }}</h3>
+    </div>
+    <div class="flex justify-between items-start mt-2">
+        {% if restaurant.jenis_makanan == "Indonesia" %}
+            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">
+        {% elif restaurant.jenis_makanan == "Middle Eastren"%}
+            <img src="{% static 'image/arabian.png' %}" alt="Bendera Arab" class="w-6 h-auto">
+        {% elif restaurant.jenis_makanan == "Western"%}
+            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">  
+        {% elif restaurant.jenis_makanan == "Japanese"%}
+            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">  
+        {% elif restaurant.jenis_makanan == "Chinese"%}
+            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">        
+        {% else %}
+            <p class="text-gray-700">{{ restaurant.jenis_makanan }}</p>
+        {% endif %}
+        <div class="text-right">
+            <p class="text-gray-700">Rating:</p>
+            <p class="text-yellow-500 text-2xl">{{ restaurant.rating }}</p>
+        </div>
+    </div>
+    <p class="text-gray-600">Harga rata-rata: Rp.{{ restaurant.harga }}</p>
+    <p class="text-gray-600">Jarak (dari titik 0 jogja): {{ restaurant.jarak }} km</p>
+</div>
