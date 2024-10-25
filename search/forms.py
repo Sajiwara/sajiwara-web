@@ -4,4 +4,4 @@ from search.models import Restaurant
 class RestaurantForm(ModelForm):
     class Meta:
         model = Restaurant
-        fields = ["nama", "jenis", "rating"]
+        fields = ["nama", "jenis", "rating", "harga", "jarak"]

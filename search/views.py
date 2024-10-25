@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from search.models import Restaurant
+from django.http import HttpResponse
+from django.core import serializers
 
 def show_search(request):
     # Mendapatkan parameter dari URL (GET)
@@ -26,18 +28,39 @@ def show_search(request):
                 restaurants = restaurants.filter(rating__gte=3, rating__lt=4)
             elif query_rating == "4":
                 restaurants = restaurants.filter(rating__gte=4, rating__lte=5)
+            elif query_rating == "0":
+                restaurants = restaurants.filter(rating__gte=0, rating__lte=1)
+
 
         # Urutkan hasil pencarian berdasarkan pilihan pengguna
-        restaurants = restaurants.order_by(sort_by)
+        if sort_by in ['nama', '-nama', 'rating', '-rating', 'harga', '-harga', 'jarak', '-jarak']:
+            restaurants = restaurants.order_by(sort_by)
 
         # Jika tidak ada restoran yang cocok, kirimkan pesan
         if not restaurants.exists():
-            message = "nggak ada yg cocok bjir"
+            message = "Tidak ada data yang cocok"
         else:
             message = None
     else:
         # Jika belum ada pencarian, tidak menampilkan restoran
         restaurants = None
-        message = "mau makan apa?"
+        message = "Mau makan apa hari ini?"
 
     return render(request, 'search.html', {'restaurants': restaurants, 'message': message})
+
+
+def show_xml(request):
+    data = Restaurant.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json(request):
+    data = Restaurant.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Restaurant.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Restaurant.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")

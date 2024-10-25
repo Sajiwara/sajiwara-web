@@ -18,6 +18,12 @@ def runsearch():
             rating = row['Rating Toko']
             rating = rating.strip()
 
-            if not Restaurant.objects.filter(nama=restoran,jenis_makanan =jenis,rating = rating).exists():
-                restoran_obj = Restaurant(nama=restoran,jenis_makanan=jenis,rating=rating)
+            harga = row['Harga Rata-Rata Makanan di Toko (Rp)']
+            harga = harga.strip()
+
+            jarak_str = row['Lokasi Restoran'].strip()
+            jarak = float(jarak_str.replace(' km', '')) 
+            
+            if not Restaurant.objects.filter(nama=restoran,jenis_makanan =jenis,rating = rating,harga=harga,jarak=jarak).exists():
+                restoran_obj = Restaurant(nama=restoran,jenis_makanan=jenis,rating=rating,harga=harga,jarak=jarak)
                 restoran_obj.save()
