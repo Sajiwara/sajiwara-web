@@ -4,17 +4,16 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div class="min-h-screen flex flex-col">
-    <div class="flex-grow">
-        </br>
-        <p class="items-center text-center text-2xl text-orange-700 font-bold">Daftar Wishlist Restoran</p>
-        </br>
+<div class="min-h-screen flex flex-col bg-gray-50">
+    <div class="flex-grow py-8">
+        <p class="text-center text-3xl font-bold text-orange-700">Daftar Wishlist Restoran</p>
 
         <!-- Button to trigger modal -->
-        <div class="flex justify-center items-center">
-            <button id="open-modal-btn" class="bg-[#ff611d] p-2 rounded-md text-white text-sm">Add Wishlist</button>
+        <div class="flex justify-center mt-6">
+            <button id="open-modal-btn" class="bg-orange-500 hover:bg-orange-600 transition duration-200 text-white font-medium py-2 px-4 rounded-md text-sm shadow-lg">
+                Add Wishlist
+            </button>
         </div>
-        </br>
 
         <!-- Modal for add_to_wishlist -->
         <div id="addWishlistModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1050]">
@@ -45,7 +44,93 @@
                 </div>
             </div>
         </div>
+    
+        <!-- Wishlist and visited restaurants list -->
+        <div class="container mx-auto py-6">
+            {% if not wishlist_restaurants %}
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-600">Belum ada wishlist restoran yang kamu tambahkan dan kamu kunjungi.</p>
+                </div>
+            {% else %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for resto_entry in wishlist_restaurants %}
+                        {% include 'card_wishlist.html' with resto_entry=resto_entry %}
+                    {% endfor %}
+                </div>
+                
+                <p class="text-center text-3xl font-bold text-orange-700 mt-10">Restoran yang Telah Dikunjungi</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+                    {% if not visited_restaurants %}
+                        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                            <p class="text-center text-gray-600">Belum ada wishlist restoran yang kamu kunjungi.</p>
+                        </div>
+                    {% else %}
+                        {% for resto_entry in visited_restaurants %}
+                            {% if resto_entry.visited %}
+                                {% include 'card_dikunjungi.html' with resto_entry=resto_entry %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#open-modal-btn').click(function() {
+            $('#addWishlistModal').removeClass('hidden');
+        });
+        $('#close-modal-btn').click(function() {
+            $('#addWishlistModal').addClass('hidden');
+        });
+        $('#wishlist-form').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'wishlistresto:add_to_wishlist' %}",
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#response-message').html('<p class="text-green-500">' + response.message + '</p>');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        $('#response-message').html('<p class="text-red-500">' + response.message + '</p>');
+                    }
+                },
+                error: function() {
+                    $('#response-message').html('<p class="text-red-500">Terjadi kesalahan. Coba lagi nanti.</p>');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}
+
+
+{% comment %} 
+
+<div class="min-h-screen flex flex-col">
+    <div class="flex-grow">
+        </br>
+        <p class="items-center text-center text-2xl text-orange-700 font-bold">Daftar Wishlist Restoran</p>
+        </br>
+
+        <!-- Button to trigger modal -->
+        <div class="flex justify-center items-center">
+            <button id="open-modal-btn" class="bg-[#ff611d] p-2 rounded-md text-white text-sm">Add Wishlist</button>
+        </div>
+        </br>
+
+        
         <!-- Daftar wishlist restoran dan dikunjungi, sesuai kode awal -->
         {% if not wishlist_restaurants %}
             <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
@@ -123,4 +208,4 @@
     });
 </script>
 
-{% endblock content %}
+{% endblock content %} {% endcomment %}

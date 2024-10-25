@@ -1,40 +1,39 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 {% load static %}
-{%block content%}
+{% block content %}
     <!-- Navbar -->
     {% include 'navbar.html' %}
 
     <!-- Hero Section -->
-    <section class="bg-cover bg-center h-screen" style="background-image: url('{% static 'image/bgsajiwarajogja3.png' %}');">
-        <div class="container mx-auto flex flex-col justify-center items-center h-full">
-            <div class="flex items-center justify-center h-screen">
-                <div class="relative bg-[#903711] bg-opacity-50 p-8 rounded-lg text-center animate-shine">
-                  <h1 class="text-5xl font-bold text-white mb-4">Welcome to Sajiwara</h1>
-                  <p class="text-lg text-white mb-6">Explore the best culinary experiences in Jogja!</p>
-                  <a href="{% url 'tipemakanan:makanan_list' %}" class="bg-orange-600 text-white py-3 px-6 rounded-lg hover:bg-orange-700">
+    <section class="relative h-screen bg-cover bg-center" style="background-image: url('{% static 'image/bgsajiwarajogja3.png' %}');">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#902311] via-[#902311b3] to-transparent"></div>
+        <div class="container mx-auto flex items-center justify-center h-full relative z-10">
+            <div class="text-center p-8 bg-[#902311] bg-opacity-50 rounded-lg animate-shine">
+                <h1 class="text-5xl font-bold text-white mb-4">Welcome to Sajiwara</h1>
+                <p class="text-lg text-white mb-6">Explore the best culinary experiences in Jogja!</p>
+                <a href="{% url 'tipemakanan:makanan_list' %}" class="inline-block bg-orange-600 text-white py-3 px-8 rounded-lg font-semibold shadow-lg hover:bg-orange-700 transition-transform duration-300 transform hover:scale-105">
                     Explore Now
-                  </a>
-                </div>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="py-16 bg-orange-100 ">
+    <section class="py-16 bg-orange-50">
         <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold text-orange-600 mb-8">Why Choose Sajiwara?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 shadow-lg rounded-lg  border-2 border-orange-600">
-                    <h3 class="text-xl font-semibold mb-4">Wide Range of Foods</h3>
-                    <p>Discover a variety of cuisines and restaurants in Jogja, curated just for you.</p>
+            <h2 class="text-4xl font-bold text-orange-600 mb-12">Why Choose Sajiwara?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 px-6 md:px-0">
+                <div class="bg-white p-8 shadow-lg rounded-lg border border-orange-200 transform transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <h3 class="text-2xl font-semibold text-orange-800 mb-3">Wide Range of Foods</h3>
+                    <p class="text-gray-600">Discover a variety of cuisines and restaurants in Jogja, curated just for you.</p>
                 </div>
-                <div class="bg-white p-6 shadow-lg rounded-lg  border-2 border-orange-600">
-                    <h3 class="text-xl font-semibold mb-4">User Reviews</h3>
-                    <p>Read reviews from real users to help you decide where to eat.</p>
+                <div class="bg-white p-8 shadow-lg rounded-lg border border-orange-200 transform transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <h3 class="text-2xl font-semibold text-orange-800 mb-3">User Reviews</h3>
+                    <p class="text-gray-600">Read reviews from real users to help you decide where to eat.</p>
                 </div>
-                <div class="bg-white p-6 shadow-lg rounded-lg  border-2 border-orange-600">
-                    <h3 class="text-xl font-semibold mb-4">Easy Navigation</h3>
-                    <p>Use our easy-to-navigate platform to find food options based on your preferences.</p>
+                <div class="bg-white p-8 shadow-lg rounded-lg border border-orange-200 transform transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <h3 class="text-2xl font-semibold text-orange-800 mb-3">Easy Navigation</h3>
+                    <p class="text-gray-600">Use our easy-to-navigate platform to find food options based on your preferences.</p>
                 </div>
             </div>
         </div>
@@ -42,54 +41,92 @@
 
     <!-- Call to Action Section -->
     {% if user.is_authenticated %}
-        <section class="py-16 bg-orange-100 ">
+        <section class="py-16 bg-orange-100">
             <div class="container mx-auto text-center">
-                <h2 class="text-3xl font-bold text-orange-600 mt-7 mb-8">Explore Sajiwara Features</h2>
-                <div class="flex flex-wrap justify-between">
+                <h2 class="text-4xl font-bold text-orange-700 mt-7 mb-12">Explore Sajiwara Features</h2>
+                <div class="flex flex-wrap justify-center gap-6">
+                    
                     <!-- Card 1 -->
-                    <div class="max-w-sm rounded overflow-hidden mt-3 mb-7 shadow-lg bg-white border-2 border-orange-600 flex-grow mx-4">
-                        <img class="w-full" src="https://via.placeholder.com/300x150" alt="Search Food">
-                        <div class="px-6 py-4">
-                            <h3 class="text-xl font-semibold mb-4">Search</h3>
-                            <p>Explore Jogja's Restaurant and food only one click</p>
+                    <div class="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white border border-orange-300 flex-grow transform hover:-translate-y-2 transition-all duration-300 mx-4">
+                        <div class="flex justify-center">
+                            <img class="w-40 h-40 object-cover mx-auto" src="{% static 'image/search-food.png' %}" alt="Search Food">
                         </div>
-                        <div class="px-6 pt-4 pb-2">
-                            <a href="" class="bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700">Try Search</a>
+                        <div class="p-6"> 
+                            <h3 class="text-2xl font-semibold text-orange-800 mb-3">Search</h3>
+                            <p class="text-gray-600">Explore Jogja's restaurants and food with a single click.</p>
+                        </div>
+                        <div class="p-6">
+                            <a href="search:show_search" class="bg-orange-600 text-white py-2 px-6 rounded-full font-medium hover:bg-orange-700 transition duration-300">Try Search</a>
                         </div>
                     </div>
-            
+                    
                     <!-- Card 2 -->
-                    <div class="max-w-sm rounded overflow-hidden shadow-lg mt-7 mb-7 bg-white border-2 border-orange-600 flex-grow mx-4">
-                        <img class="w-full" src="https://via.placeholder.com/300x150" alt="Explore Food">
-                        <div class="px-6 py-4">
-                            <h3 class="text-xl font-semibold mb-4">Explore Food</h3>
-                            <p>Explore a lot of Jogja's Restaurant food by country preference</p>
+                    <div class="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white border border-orange-300 flex-grow transform hover:-translate-y-2 transition-all duration-300 mx-4">
+                        <div class="flex justify-center">
+                            <img class="w-40 h-40 object-cover mx-auto" src="{% static 'image/explore-food.png' %}" alt="Explore Food">
                         </div>
-                        <div class="px-6 pt-4 pb-2">
-                            <a href="{% url 'tipemakanan:makanan_list' %}" class="bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700">Try Explore Food</a>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-orange-800 mb-3">Explore Food</h3>
+                            <p class="text-gray-600">Discover Jogja’s restaurant food by country preference.</p>
+                        </div>
+                        <div class="p-6">
+                            <a href="{% url 'tipemakanan:makanan_list' %}" class="bg-orange-600 text-white py-2 px-6 rounded-full font-medium hover:bg-orange-700 transition duration-300">Try Explore Food</a>
                         </div>
                     </div>
-            
+                    
                     <!-- Card 3 -->
-                    <div class="max-w-sm rounded overflow-hidden mt-7 mb-7 shadow-lg bg-white border-2 border-orange-600 flex-grow mx-4">
-                        <img class="w-full" src="https://via.placeholder.com/300x150" alt="Add Restaurant Wishlist">
-                        <div class="px-6 py-4">
-                            <h3 class="text-xl font-semibold mb-4">Add Restaurant Wishlist</h3>
-                            <p>Add your Jogja's Restaurant bucket list and tick them off when you visit.</p>
+                    <div class="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white border border-orange-300 flex-grow transform hover:-translate-y-2 transition-all duration-300 mx-4">
+                        <div class="flex justify-center">
+                            <img class="w-40 h-40 object-cover" src="{% static 'image/wishlist-resto.png' %}" alt="Add Restaurant Wishlist">
                         </div>
-                        <div class="px-6 pt-4 pb-2">
-                            <a href="{% url 'wishlistresto:show_wishlistresto' %}" class="bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700">Try Add Resto Wishlist</a>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-orange-800 mb-3">Add Restaurant Wishlist</h3>
+                            <p class="text-gray-600">Add your Jogja restaurant bucket list and check them off as you visit.</p>
+                        </div>
+                        <div class="p-6">
+                            <a href="{% url 'wishlistresto:show_wishlistresto' %}" class="bg-orange-600 text-white py-2 px-6 rounded-full font-medium hover:bg-orange-700 transition duration-300">Try Add Resto Wishlist</a>
                         </div>
                     </div>
+        
+                    <!-- Card 4 -->
+                    <div class="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white border border-orange-300 flex-grow transform hover:-translate-y-2 transition-all duration-300 mx-4">
+                        <div class="flex justify-center">
+                            <img class="w-40 h-40 object-cover" src="{% static 'image/wishlist-food.png' %}" alt="Add Food Wishlist">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-orange-800 mb-3">Add Food Wishlist</h3>
+                            <p class="text-gray-600">Easily add Jogja's culinary favorites to your bucket list.</p>
+                        </div>
+                        <div class="p-6">
+                            <a href="" class="bg-orange-600 text-white py-2 px-6 rounded-full font-medium hover:bg-orange-700 transition duration-300">Try Add Food Wishlist</a>
+                        </div>
+                    </div>
+        
+                    <!-- Card 5 -->
+                    <div class="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white border border-orange-300 flex-grow transform hover:-translate-y-2 transition-all duration-300 mx-4">
+                        <div class="flex justify-center">
+                            <img class="w-40 h-40 object-cover" src="{% static 'image/review-resto.png' %}" alt="Review">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-orange-800 mb-3">Review</h3>
+                            <p class="text-gray-600">Still considering? See all of Jogja's restaurant reviews.</p>
+                        </div>
+                        <div class="p-6">
+                            <a href="review:show_main" class="bg-orange-600 text-white py-2 px-6 rounded-full font-medium hover:bg-orange-700 transition duration-300">Explore All Reviews</a>
+                        </div>
+                    </div>
+        
                 </div>
             </div>
         </section>
+
+    
     {% else %}
         <section class="bg-orange-600 py-16">
             <div class="container mx-auto text-center">
                 <h2 class="text-3xl font-bold text-white mb-8">Ready to Explore?</h2>
                 <p class="text-white text-lg mb-8">Find your next meal with Sajiwara!</p>
-                <a href="{% url 'landingpage:register' %}" class="bg-white text-orange-600 py-3 px-6 rounded-lg font-bold hover:bg-gray-200">
+                <a href="{% url 'landingpage:register' %}" class="bg-white text-orange-600 py-3 px-6 rounded-lg font-bold hover:bg-gray-200 shadow-md transition-transform duration-300 transform hover:scale-105">
                     Sign Up Now
                 </a>
             </div>
@@ -97,10 +134,5 @@
     {% endif %}
 
     <!-- Footer -->
-    {% comment %} <footer class="bg-gray-800 py-8 text-white">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Sajiwara. All Rights Reserved.</p>
-        </div>
-    </footer> {% endcomment %}
-    {% include 'footer.html'%}
-{%endblock content%}
+    {% include 'footer.html' %}
+{% endblock content %}
