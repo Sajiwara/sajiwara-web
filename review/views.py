@@ -20,7 +20,7 @@ def show_main(request):
     return render(request, "review_main.html", context)
 
 def restaurant_detail(request, id):
-    restaurant = get_object_or_404(Restor, pk=id)
+    restaurant = get_object_or_404(Restor, id=id)
     restaurant_reviews = restaurant.reviews.all()
     context = {
         'restaurant': restaurant,
@@ -29,8 +29,8 @@ def restaurant_detail(request, id):
     
     return render(request, 'restaurant_detail.html', context)
 
-def add_review(request, restaurant_id):
-    restaurant = get_object_or_404(Restor, id=restaurant_id)  # Make sure the restaurant is correctly fetched
+def add_review(request, id):
+    restaurant = get_object_or_404(Restor, id=id)  # Make sure the restaurant is correctly fetched
 
     if not request.user.is_authenticated:
         messages.warning(request, "You must be logged in to add a review.")
@@ -43,25 +43,24 @@ def add_review(request, restaurant_id):
         review.user = request.user  # Assign the user who submitted the review
         review.restaurant = restaurant  # Link the review to the current restaurant
         review.save()  # Now save the review with the assigned fields
-        return redirect('review:restaurant_detail', id=restaurant_id)
+        return redirect('review:restaurant_detail', id=id)
 
     context = {'form': form, 'restaurant': restaurant}
     return render(request, "add_review.html", context)
 
-def delete_review(request, review_id):
-    review = Review.objects.get(pk =review_id)
+def delete_review(request, id):
+    review = Review.objects.get(id=id)
     review.delete()
     return redirect(request.META.get('HTTP_REFERER', reverse('review:show_main')))  # Redirect back
 
-def edit_review(request, review_id):
-    review = get_object_or_404(Review, id=review_id)
-
+def edit_review(request, id):
+    review = get_object_or_404(Review, id=id)
+    restaurant_id = review.restaurant.id
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)  # Prepopulate the form with the current review data
         if form.is_valid():
             form.save()  # Save the updated review
-            messages.success(request, "Your review has been updated successfully!")
-            return redirect('review:restaurant_detail', id=review.restaurant.id)
+            return redirect('review:restaurant_detail', id=restaurant_id)
     else:
         form = ReviewForm(instance=review)  # Show the form with the existing review data
 

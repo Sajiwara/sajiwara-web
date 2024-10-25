@@ -5,11 +5,8 @@ app_name = 'wishlistresto'
 
 urlpatterns = [
      path('', show_wishlistresto, name='show_wishlistresto'),
-     path('add/', add_to_wishlist, name='add_to_wishlist'),
-     path('visited/<int:id>/', visited_resto, name='visited_resto'),
-     path('notvisited/<int:id>/', not_visited_resto, name='not_visited_resto'),
-     path('deletewishlist/<int:id>/', delete_wishlist, name='delete_wishlist'),
-     # >/', visited_resto, name='visited_resto'),
-     # path('notvisited/<uuid:id>/', not_visited_resto, name='not_visited_resto'),
-     # path('deletewishlist/<uuid
+     path('add-to-wishlist/', add_to_wishlist, name='add_to_wishlist'),
+     path('visited/<uuid:id>/', visited_resto, name='visited_resto'),
+     path('notvisited/<uuid:id>/', not_visited_resto, name='not_visited_resto'),
+     path('deletewishlist/<uuid:id>/', delete_wishlist, name='delete_wishlist'),
 ]

@@ -1,26 +1,10 @@
-# from django import forms
-
-# class SearchRestoForm(forms.Form):
-#     query = forms.CharField(label='Nama Restoran', max_length=266)
-
-# from django import forms
-# from .models import Resto
-
-# class SearchRestoForm(forms.Form):
-#     # restaurant_ids = forms.ModelMultipleChoiceField(
-#     #     queryset=Resto.objects.all(),
-#     #     widget=forms.CheckboxSelectMultiple,
-#     #     label="Pilih Restoran"
-#     # )
-#     query = forms.CharField(label='Pilih Restoran', max_length=266)
-
 from django import forms
 from django.forms import ModelForm
-from wishlistresto.models import Resto
+from wishlistresto.models import Resto,WishlistResto
 
 class SearchRestoForm(ModelForm):
     class Meta:
-        model = Resto
+        model = WishlistResto
         fields = ["restaurant"]
 
     restaurant = forms.ModelChoiceField(

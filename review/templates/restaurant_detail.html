@@ -15,8 +15,8 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<body class="bg-gray-100 h-screen">
-    <div class="w-[87.5%] mx-auto h-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+<body class="bg-gray-100 h-screen" style="background-image: url('{% static 'images/bgsajiwarajogja2.png' %}'); background-size: cover; background-position: center;">
+    <div class="w-[87.5%] mx-auto h-auto mt-10 p-6 bg-orange-100 rounded-lg shadow-md border border-orange-500">
         <h1 class="text-4xl font-bold text-center p-4">{{ restaurant.restaurant }}</h1>
         <div class="flex justify-center mt-4 text-xl">
             <span class="text-yellow-500">★</span>

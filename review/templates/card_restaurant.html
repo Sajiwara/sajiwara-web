@@ -1,15 +1,15 @@
-<a href="{% url 'review:restaurant_detail' restaurant.id %}" class="p-4">
-    <div class="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow duration-200 border border-orange-300 hover:outline hover:outline-2 hover:outline-orange-500 w-144 h-36">
-        <h2 class="text-lg font-bold text-center">{{restaurant.restaurant}}</h2>
-        <div class="flex justify-center mt-2 text-xl">
+<a href="{% url 'review:restaurant_detail' restaurant.id %}" class="block p-4">
+    <div class="bg-orange-100 rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-transform transform hover:scale-105 border border-orange-400 hover:border-orange-500 hover:ring-4 hover:ring-orange-500/50 w-full h-40">
+        <h2 class="text-2xl font-extrabold text-center text-orange-600 tracking-wide truncate">{{ restaurant.restaurant }}</h2>
+        <div class="flex justify-center items-center mt-4 text-2xl space-x-1">
             {% for i in "★★★★★" %}
                 {% if forloop.counter <= restaurant.rating %}
-                    <span class="text-yellow-500">★</span>
+                    <span class="text-yellow-400">★</span>
                 {% else %}
                     <span class="text-gray-300">★</span>
                 {% endif %}
             {% endfor %}
-            <span class="text-black ml-1">{{ restaurant.rating }} / 5.0</span>
+            <span class="text-gray-700 font-semibold ml-2">{{ restaurant.rating }} / 5.0</span>
         </div>
     </div>
 </a>

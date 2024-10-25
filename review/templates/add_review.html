@@ -7,17 +7,21 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div class="flex flex-col min-h-screen bg-gray-100">
-  <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
-    <h1 class="text-3xl font-bold text-center mb-8 text-black">Add Review</h1>
+<div class="flex flex-col min-h-screen bg-gray-100" style="background-image: url('{% static 'images/bgsajiwarajogja2.png' %}'); background-size: cover; background-position: center;">
+  <div class="container mx-auto px-4 py-8 mt-16 max-w-xl" >
+    <div class="bg-white rounded-lg p-4 mb-8 shadow-md">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 drop-shadow-lg">
+            Share us your experience!
+        </h1>
+    </div>
   
-    <div class="bg-white shadow-md rounded-lg p-6 form-style">
+    <div class="bg-white shadow-md rounded-lg p-6 form-style border border-orang-700">
       <form method="POST" class="space-y-6">
         {% csrf_token %}
         {% for field in form %}
           <div class="flex flex-col">
             <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
-              {{ field.label }}
+              {{ field.label }}:
             </label>
             <div class="w-full">
               {{ field }}
@@ -31,8 +35,8 @@
           </div>
         {% endfor %}
         <div class="flex justify-center mt-6">
-          <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
-            submit
+          <button type="submit" class="bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
+            Submit
           </button>
         </div>
       </form>

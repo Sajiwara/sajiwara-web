@@ -14,23 +14,25 @@
 
 {% block content %}
 {% include 'navbar.html' %}
+<body style="background-color: #d98934;">
+    <div id="ilham_h1" class="flex justify-center p-16">
+        <h1 class="text-5xl font-extrabold text-white tracking-wide uppercase bg-orange-700 py-4 px-8 rounded-lg shadow-lg transform transition duration-300 hover:scale-110">
+            Restaurant Reviews
+        </h1>
+    </div>
 
-<div id="ilham_h1" class="flex justify-center text-orange-500 p-16">
-    <h1>Restaurant Reviews</h1>
-</div>
-
-{% if not restaurants %}
-<div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-    <p class="text-center text-gray-600 mt-4">Belum ada data restoran.</p>
-</div>
-{% else %}
-<div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full p-2">
-    {% for restaurant in restaurants %}
-        {% include 'card_restaurant.html' with restaurant=restaurant %}
-    {% endfor %}
-</div>
-{% endif %}
-
+    {% if not restaurants %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <p class="text-center text-gray-600 mt-4">Belum ada data restoran.</p>
+    </div>
+    {% else %}
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full px-8 py-2">
+        {% for restaurant in restaurants %}
+            {% include 'card_restaurant.html' with restaurant=restaurant %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
 
 {% endblock content %}
 

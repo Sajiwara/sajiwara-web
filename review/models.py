@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Restor(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     restaurant = models.CharField(max_length=266)
     rating = models.FloatField()
 
@@ -12,6 +13,7 @@ class Restor(models.Model):
         return f"{self.restaurant}, {self.rating}"
     
 class Review(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     restaurant = models.ForeignKey(Restor, on_delete=models.CASCADE, related_name='reviews')
     review = models.TextField()
