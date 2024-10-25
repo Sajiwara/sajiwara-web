@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import ReviewForm
 from django.contrib import messages
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -29,45 +30,75 @@ def restaurant_detail(request, id):
     
     return render(request, 'restaurant_detail.html', context)
 
+@csrf_exempt
 def add_review(request, id):
-    restaurant = get_object_or_404(Restor, id=id)  # Make sure the restaurant is correctly fetched
+    restaurant = get_object_or_404(Restor, id=id)
 
     if not request.user.is_authenticated:
-        messages.warning(request, "You must be logged in to add a review.")
-        return redirect('landingpage:login')
+        messages.warning(request, "Login is required to add review")
+        return JsonResponse({'status': 'error', 'message': 'Login required', 'redirect_url': reverse('landingpage:login')})
 
-    form = ReviewForm(request.POST or None)
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.restaurant = restaurant
+            review.save()
+            
+            # Render hanya bagian review
+            restaurant_reviews = restaurant.reviews.all()
+            reviews_html = ""
+            for review in restaurant_reviews:
+                reviews_html += render_to_string('card_review.html', {
+                    'review': review,
+                }, request=request)
+            
+            return JsonResponse({
+                'status': 'success',
+                'html': reviews_html
+            })
+    return JsonResponse({'status': 'error'})
 
-    if form.is_valid() and request.method == "POST":
-        review = form.save(commit=False)  # Don't save the review yet
-        review.user = request.user  # Assign the user who submitted the review
-        review.restaurant = restaurant  # Link the review to the current restaurant
-        review.save()  # Now save the review with the assigned fields
-        return redirect('review:restaurant_detail', id=id)
-
-    context = {'form': form, 'restaurant': restaurant}
-    return render(request, "add_review.html", context)
-
-def delete_review(request, id):
-    review = Review.objects.get(id=id)
-    review.delete()
-    return redirect(request.META.get('HTTP_REFERER', reverse('review:show_main')))  # Redirect back
-
+@csrf_exempt
 def edit_review(request, id):
     review = get_object_or_404(Review, id=id)
-    restaurant_id = review.restaurant.id
+    
     if request.method == "POST":
-        form = ReviewForm(request.POST, instance=review)  # Prepopulate the form with the current review data
+        form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
-            form.save()  # Save the updated review
-            return redirect('review:restaurant_detail', id=restaurant_id)
-    else:
-        form = ReviewForm(instance=review)  # Show the form with the existing review data
+            form.save()
+            restaurant = review.restaurant
+            restaurant_reviews = restaurant.reviews.all()
+            
+            reviews_html = ""
+            for review in restaurant_reviews:
+                reviews_html += render_to_string('card_review.html', {
+                    'review': review,
+                }, request=request)
+            
+            return JsonResponse({
+                'status': 'success',
+                'html': reviews_html
+            })
+    return JsonResponse({'status': 'error'})
 
-    context = {
-        'form': form,
-        'review': review,
-    }
-    return render(request, 'add_review.html', context)
+@csrf_exempt
+def delete_review(request, id):
+    review = get_object_or_404(Review, id=id)
+    restaurant = review.restaurant
+    review.delete()
+    
+    restaurant_reviews = restaurant.reviews.all()
+    reviews_html = ""
+    for review in restaurant_reviews:
+        reviews_html += render_to_string('card_review.html', {
+            'review': review,
+        }, request=request)
+    
+    return JsonResponse({
+        'status': 'success',
+        'html': reviews_html if reviews_html else '<div class="flex flex-col items-center justify-center min-h-[24rem] p-6"><p class="text-center text-gray-600 mt-4">Belum ada data review.</p></div>'
+    })
 
     
