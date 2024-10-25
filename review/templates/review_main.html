@@ -23,6 +23,7 @@
 
     {% if not restaurants %}
     <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <img src="{% static 'image/sedih-banget.png' %}" alt="No Reviews" class="w-32 h-32 mb-4"/>
         <p class="text-center text-gray-600 mt-4">Belum ada data restoran.</p>
     </div>
     {% else %}

@@ -35,8 +35,7 @@ def add_review(request, id):
     restaurant = get_object_or_404(Restor, id=id)
 
     if not request.user.is_authenticated:
-        messages.warning(request, "Login is required to add review")
-        return JsonResponse({'status': 'error', 'message': 'Login required', 'redirect_url': reverse('landingpage:login')})
+        return JsonResponse({'status': 'error', 'message': 'Login required'})
 
     if request.method == "POST":
         form = ReviewForm(request.POST)

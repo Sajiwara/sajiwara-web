@@ -19,11 +19,33 @@
 
 <body class="bg-gray-100 h-screen" style="background-image: url('{% static 'images/bgsajiwarajogja2.png' %}'); background-size: cover; background-position: center;">
     <div class="w-[87.5%] mx-auto h-auto mt-10 p-6 bg-orange-100 rounded-lg shadow-md border border-orange-500">
-        <h1 class="text-4xl font-bold text-center p-4">{{ restaurant.restaurant }}</h1>
-        <div class="flex justify-center mt-4 text-xl">
-            <span class="text-yellow-500">★</span>
-            <span class="text-black ml-1">{{ restaurant.rating }}/5.0</span>
+        <h1 class="text-5xl text-center font-extrabold text-white tracking-wide uppercase bg-orange-700 py-4 px-8 rounded-lg shadow-lg transform transition duration-300 hover:scale-110">
+            {{restaurant.restaurant}}
+        </h1>        
+        <div class="flex justify-center items-center mt-4 text-4xl space-x-1">
+            {% for i in "★★★★★" %}
+                {% if forloop.counter <= restaurant.rating %}
+                    <span class="text-yellow-500 transition-transform duration-300 transform hover:scale-125">★</span>
+                {% else %}
+                    <span class="text-gray-400 transition-transform duration-300 transform hover:scale-125">★</span>
+                {% endif %}
+            {% endfor %}
+            <span class="text-gray-800 font-extrabold ml-3 text-2xl">{{ restaurant.rating }} / 5.0</span>
         </div>
+        
+        <!-- Error Message Alert -->
+        <div id="errorAlert" class="hidden mx-auto mt-4 w-96">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline" id="errorMessage"></span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" id="closeError" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <title>Close</title>
+                        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+
         <div class="flex justify-center p-8">
             <button id="addReviewBtn"
                class="bg-orange-500 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
@@ -32,15 +54,37 @@
         </div>
 
         <!-- Modal for Add Review -->
-        <div id="addReviewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                <h3 class="text-lg font-bold mb-4">Add Review</h3>
+        <div id="addReviewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center " style="z-index: 9999;">
+            <div class="relative mx-auto p-6 w-[35rem] max-w-[90%] shadow-lg rounded-lg bg-white">
+                <!-- Modal Header -->
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">Add Review</h3>
+                    <button type="button" id="closeAddModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Review Form -->
                 <form id="addReviewForm">
                     {% csrf_token %}
-                    <textarea name="review" class="w-full p-2 border rounded" rows="4" required></textarea>
-                    <div class="flex justify-end mt-4">
-                        <button type="button" id="closeAddModal" class="mr-2 px-4 py-2 bg-gray-200 rounded">Close</button>
-                        <button type="submit" class="px-4 py-2 bg-orange-500 text-white rounded">Submit</button>
+                    <textarea 
+                        name="review" 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                        rows="5" 
+                        placeholder="Share your experience..."
+                        required
+                    ></textarea>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-3 mt-4">
+                        <button 
+                            type="submit" 
+                            class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                        >
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>
@@ -48,6 +92,7 @@
 
         {% if not restaurant_reviews %}
         <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+            <img src="{% static 'image/sedih-banget.png' %}" alt="No Reviews" class="w-32 h-32 mb-4"/>
             <p class="text-center text-gray-600 mt-4">Belum ada data review.</p>
         </div>
         {% else %}
@@ -61,12 +106,24 @@
 
     <script>
         $(document).ready(function() {
+            function showError(message) {
+                $('#errorMessage').text(message);
+                $('#errorAlert').removeClass('hidden');
+                setTimeout(function() {
+                    $('#errorAlert').addClass('hidden');
+                }, 5000); // Hide after 5 seconds
+            }
+
+            $('#closeError').click(function() {
+                $('#errorAlert').addClass('hidden');
+            });
+
             // Add Review Modal
             $('#addReviewBtn').click(function() {
                 {% if user.is_authenticated %}
                     $('#addReviewModal').removeClass('hidden');
                 {% else %}
-                    window.location.href = "{% url 'landingpage:login' %}";
+                    showError('Login is required to add review');
                 {% endif %}
             });
         
@@ -86,9 +143,12 @@
                             $('#reviewsContainer').html(response.html);
                             $('#addReviewModal').addClass('hidden');
                             $('#addReviewForm')[0].reset();
+                        } else if (response.status === 'error') {
+                            showError(response.message);
                         }
                     },
                     error: function(xhr, errmsg, err) {
+                        showError('An error occurred while adding your review');
                         console.log(xhr.status + ": " + xhr.responseText);
                     }
                 });
