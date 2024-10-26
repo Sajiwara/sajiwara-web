@@ -13,3 +13,6 @@ class SearchRestoForm(ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),  # Optional: Styling with Bootstrap
         empty_label="Select a restaurant"
     )
+
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=266, required=False, label='Search restaurant wishlist')
