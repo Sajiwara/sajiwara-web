@@ -11,6 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
 </head>
 {% endblock meta %}
 
@@ -45,6 +46,22 @@
                 </span>
             </div>
         </div>
+
+        <div class="flex justify-center mt-6">
+            <div class="bg-orange-50 border-orange-500 p-4 rounded shadow-md w-[80%] md:w-[60%] lg:w-[40%]">
+                {% if user.is_authenticated %}
+                    <p class="text-center text-gray-800 font-semibold font-[Poppins] text-lg">
+                        Hai, <span class="text-orange-600">{{ user.username }}</span>! Bagikan pengalamanmu makan di sini!
+                    </p>
+                {% else %}
+                    <p class="text-center text-gray-800 font-semibold font-[Poppins] text-lg">
+                        Silakan <a href="{% url 'landingpage:login' %}" class="text-orange-600 underline hover:text-orange-800">login</a> untuk membagikan pengalamanmu makan di sini!
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        
 
         <div class="flex justify-center p-8">
             <button id="addReviewBtn"
