@@ -33,10 +33,10 @@ def restaurant_detail(request, id):
 @csrf_exempt
 def add_review(request, id):
     restaurant = get_object_or_404(Restor, id=id)
-
+    
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Login required'})
-
+    
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -45,13 +45,25 @@ def add_review(request, id):
             review.restaurant = restaurant
             review.save()
             
-            # Render hanya bagian review
+            # Re-fetch reviews to ensure we have the latest data
             restaurant_reviews = restaurant.reviews.all()
-            reviews_html = ""
-            for review in restaurant_reviews:
-                reviews_html += render_to_string('card_review.html', {
-                    'review': review,
-                }, request=request)
+            
+            if not restaurant_reviews:
+                # Handle empty reviews case
+                reviews_html = '''
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="/static/image/sedih-banget.png" alt="No Reviews" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-600 mt-4">No reviews yet</p>
+                </div>
+                '''
+            else:
+                # Render reviews
+                reviews_html = ""
+                for review in restaurant_reviews:
+                    reviews_html += render_to_string('card_review.html', 
+                        {'review': review}, 
+                        request=request
+                    )
             
             return JsonResponse({
                 'status': 'success',
@@ -97,7 +109,12 @@ def delete_review(request, id):
     
     return JsonResponse({
         'status': 'success',
-        'html': reviews_html if reviews_html else '<div class="flex flex-col items-center justify-center min-h-[24rem] p-6"><p class="text-center text-gray-600 mt-4">Belum ada data review.</p></div>'
+        'html': reviews_html if reviews_html else '''
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="/static/image/sedih-banget.png" alt="No Reviews" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-600 mt-4">No reviews yet</p>
+                </div>
+                '''
     })
 
     
