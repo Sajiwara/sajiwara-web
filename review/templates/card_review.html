@@ -1,3 +1,4 @@
+{# card_review.html #}
 <div class="bg-white rounded-lg shadow-lg p-6 w-full transform hover:scale-105 transition-transform duration-300 ease-in-out border border-orange-500">
     <div class="flex items-center mb-4">
         <div class="w-12 h-12 rounded-full bg-indigo-200 flex items-center justify-center text-white font-bold text-lg">
@@ -9,20 +10,41 @@
         </div>
     </div>
     <div class="border-t border-gray-200 pt-4">
-        <p class="text-gray-800 text-base leading-relaxed">{{ review.review }}</p>
+        <p class="text-gray-800 text-base leading-relaxed review-content">{{ review.review }}</p>
     </div>
     <div class="mt-4 flex justify-end">
         {% if review.user == request.user %}
-            <a href="{% url 'review:edit_review' review.id %}">
-                <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-300">
-                    Edit
-                </button>
-            </a>
-            <a href="{% url 'review:delete_review' review.id %}">
-                <button class="ml-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-300">
-                    Delete
-                </button>
-            </a>
+            <button onclick="editReview('{{ review.id }}', '{{ review.review|escapejs }}')" 
+                    class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-300">
+                Edit
+            </button>
+            <button onclick="deleteReview('{{ review.id }}')"
+                    class="ml-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-300">
+                Delete
+            </button>
         {% endif %}
+    </div>
+</div>
+
+<!-- Modal for Edit Review -->
+<div id="editReviewModal-{{ review.id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center " style="z-index: 9999;">
+    <div class="relative mx-auto p-6 w-[35rem] max-w-[90%] shadow-lg rounded-lg bg-white">
+        <!-- Modal Header -->
+        <div class="mb-4">
+            <h3 class="text-lg font-bold mb-4">Edit Review</h3>
+            <button type="button" onclick="closeEditModal('{{ review.id }}')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <form id="editReviewForm-{{ review.id }}" class="edit-review-form">
+            {% csrf_token %}
+            <textarea name="review" class="w-full p-2 border rounded" rows="4" required>{{ review.review }}</textarea>
+            <div class="flex justify-end mt-4">
+                <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded">Update</button>
+            </div>
+        </form>
     </div>
 </div>
