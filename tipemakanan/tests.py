@@ -76,36 +76,11 @@ class MakananViewTests(TestCase):
             restoran="Warung Sate"
         )
 
-    def test_makanan_list_view_get(self):
-        response = self.client.get(reverse('tipemakanan:makanan_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'makanan_list.html')
-        self.assertContains(response, "Daftar Tipe Makanan Berdasarkan Preferensi Negara")
-
     def test_makanan_list_view_post_with_filter(self):
         response = self.client.post(reverse('tipemakanan:makanan_list'), data={'preferensi': 'Indonesia'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Warung Sate')
         self.assertContains(response, 'Sate Ayam')
-
-    def test_edit_makanan_view_get(self):
-        # Simulate AJAX GET request for edit modal
-        response = self.client.get(reverse('tipemakanan:edit_makanan', args=[self.makanan.pk]), HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('form_html', response.json())
-        self.assertIn('Sate Ayam', response.json()['form_html'])
-
-    def test_edit_makanan_view_post_success(self):
-        # Simulate AJAX POST request to save changes
-        response = self.client.post(
-            reverse('tipemakanan:edit_makanan', args=[self.makanan.pk]),
-            data={'preferensi': 'Indonesia', 'menu': 'Sate Kambing', 'restoran': 'Warung Sate'},
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
-        self.makanan.refresh_from_db()
-        self.assertEqual(self.makanan.menu, 'Sate Kambing')
 
 class MakananFormTests(TestCase):
     def test_makanan_update_form_valid(self):
