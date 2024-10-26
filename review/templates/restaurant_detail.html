@@ -91,16 +91,18 @@
         </div>
 
         {% if not restaurant_reviews %}
-        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-            <img src="{% static 'image/sedih-banget.png' %}" alt="No Reviews" class="w-32 h-32 mb-4"/>
-            <p class="text-center text-gray-600 mt-4">Belum ada data review.</p>
+        <div id="reviewsContainer" class="space-y-6 w-full">
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sedih-banget.png' %}" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">No reviews yet</p>
+            </div>
         </div>
         {% else %}
         <div id="reviewsContainer" class="space-y-6 w-full">
             {% for review in restaurant_reviews %}
                 {% include 'card_review.html' with review=review %}
             {% endfor %}
-        </div>        
+        </div>
         {% endif %}
     </div>
 
