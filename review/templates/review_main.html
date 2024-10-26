@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{%load static%}
+{% load static %}
 
 {% block meta %}
 <head>
@@ -21,19 +21,26 @@
         </h1>
     </div>
 
+    <div class="flex justify-center mb-6">
+        <form method="GET" action="{% url 'review:show_main' %}" class="flex w-full max-w-md">
+            <input type="text" name="query" placeholder="Search restaurants..." class="flex-grow p-2 rounded-l-lg focus:outline-none">
+            <button type="submit" class="bg-orange-600 text-white p-2 rounded-r-lg hover:bg-orange-700">
+                Search
+            </button>
+        </form>
+    </div>
+
     {% if not restaurants %}
     <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
         <img src="{% static 'image/sedih-banget.png' %}" alt="No Reviews" class="w-32 h-32 mb-4"/>
         <p class="text-center text-gray-600 mt-4">No restaurant data</p>
     </div>
     {% else %}
-    <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full px-8 py-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-8 py-2">
         {% for restaurant in restaurants %}
             {% include 'card_restaurant.html' with restaurant=restaurant %}
         {% endfor %}
     </div>
     {% endif %}
 </body>
-
 {% endblock content %}
-

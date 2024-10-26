@@ -5,17 +5,32 @@ from .models import Restor
 from .models import Review
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .forms import ReviewForm
+from .forms import ReviewForm, SearchForm
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 # Create your views here.
 
 def show_main(request):
-    restaurants = Restor.objects.all()
+    # Inisialisasi form pencarian dan form review
+    search_form = SearchForm(request.GET or None)
+    query = search_form.cleaned_data.get('query') if search_form.is_valid() else None
 
+    # Jika ada query, filter restoran berdasarkan query
+    if query:
+        restaurants = Restor.objects.filter(Q(restaurant__icontains=query))
+    else:
+        restaurants = Restor.objects.all()
+
+    # Inisialisasi form review
+    review_form = ReviewForm()  
+
+    # Mengatur konteks untuk dikirim ke template
     context = {
-        'restaurants' : restaurants
+        'restaurants': restaurants,
+        'review_form': review_form,
+        'search_form': search_form,  # Tambahkan search_form ke konteks
     }
 
     return render(request, "review_main.html", context)
