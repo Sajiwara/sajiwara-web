@@ -19,6 +19,7 @@ def import_menu_resto():
             # Check and save the menu item, associating it with the restaurant
             if not Menu.objects.filter(menu=menu_name, restaurant=restaurant).exists():
                 menu_item = Menu(menu=menu_name, restaurant=restaurant)
+                print(menu_item)
                 menu_item.save()
 
 # Call the function to run the import
