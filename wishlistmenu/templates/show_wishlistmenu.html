@@ -6,7 +6,7 @@
 
 <div class="min-h-screen flex flex-col bg-gray-50">
     <div class="flex-grow py-8">
-        <p class="text-center text-3xl font-bold text-orange-700">Daftar Wishlist Restoran</p>
+        <p class="text-center text-3xl font-bold text-orange-700">Daftar Wishlist Makanan</p>
 
         <!-- Button to trigger modal -->
         <div class="flex justify-center mt-6">
@@ -15,30 +15,21 @@
             </button>
         </div>
 
-        <div class="flex justify-center mb-6">
-            <form method="GET" action="{% url 'wishlistresto:show_wishlistresto' %}" class="flex w-full max-w-md">
-                <input type="text" name="query" placeholder="Cari restoran di wishlist" class="flex-grow p-2 rounded-l-lg focus:outline-none">
-                <button type="submit" class="bg-orange-600 text-white p-2 rounded-r-lg hover:bg-orange-700">
-                    Cari
-                </button>
-            </form>
-        </div>
-
         <!-- Modal for adding to wishlist -->
         <div id="addWishlistModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1050]">
             <div class="relative top-1/4 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
                 <div class="mt-3 text-center">
-                    <h3 class="text-2xl text-orange-700 font-bold">Tambah Restoran ke Wishlist</h3>
+                    <h3 class="text-2xl text-orange-700 font-bold">Tambah Menu ke Wishlist</h3>
                     <form id="wishlist-form" method="POST">
                         {% csrf_token %}
-                        <!-- Dropdown untuk memilih restoran dari model Resto -->
+                        <!-- Dropdown untuk memilih menu dari model Menu -->
                         <div class="mb-4">
-                            <label for="restaurant" class="block text-sm font-medium text-gray-700">Pilih Restoran</label>
-                            <select id="id_restaurant" name="restaurant" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
-                                {% for resto in restos %}
-                                    <option value="{{ resto.pk }}">{{ resto.restaurant }}</option>
+                            <label for="menu" class="block text-sm font-medium text-gray-700">Pilih Menu</label>
+                            <select id="id_menu" name="menu" class="mt-1 block w-full">
+                                {% for menu in menus %}
+                                    <option value="{{ menu.id }}">{{ menu.menu }}</option>
                                 {% endfor %}
-                            </select>
+                            </select>                            
                         </div>
                         <div class="text-center">
                             <button type="submit" class="bg-orange-500 text-white font-bold py-2 px-4 rounded mt-4">Tambah</button>
@@ -52,39 +43,42 @@
             </div>
         </div>
 
-        <!-- Wishlist and visited restaurants list -->
+        <!-- Wishlist yang belum dicoba -->
+        <p class="text-center text-2xl font-bold text-orange-700 mt-10">Menu Wishlist Kamu</p>
         <div class="container mx-auto py-6">
-            {% if not wishlist_restaurants %}
-                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                    <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-                    <p class="text-center text-gray-600">Belum ada wishlist restoran yang kamu tambahkan dan kamu kunjungi.</p>
-                </div>
-            {% else %}
+            {% if wishlist_menus %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {% for resto_entry in wishlist_restaurants %}
-                        {% include 'card_wishlistmenu.html' with resto_entry=resto_entry %}
+                    {% for menu_entry in wishlist_menus %}
+                        {% if not menu_entry.tried %}
+                            {% include 'card_wishlistmenu.html' with menu_entry=menu_entry %}
+                        {% endif %}
                     {% endfor %}
                 </div>
-                
-                <p class="text-center text-3xl font-bold text-orange-700 mt-10">Restoran yang Telah Dikunjungi</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-                    {% if not visited_restaurants %}
-                        <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                            <p class="text-center text-gray-600">Belum ada wishlist restoran yang kamu kunjungi.</p>
-                        </div>
-                    {% else %}
-                        {% for resto_entry in visited_restaurants %}
-                            {% if resto_entry.visited %}
-                                {% include 'card_dikunjungi.html' with resto_entry=resto_entry %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+            {% else %}
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-600">Belum ada wishlist menu yang kamu tambahkan.</p>
                 </div>
             {% endif %}
         </div>
+
+        <!-- Wishlist yang sudah dicoba, tampilkan hanya jika ada -->
+        {% if tried_menus %}
+            <p class="text-center text-2xl font-bold text-orange-700 mt-10">Menu yang Telah Dicoba</p>
+            <div class="container mx-auto py-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for menu_entry in tried_menus %}
+                        {% if menu_entry.tried %}
+                            {% include 'card_dicoba.html' with menu_entry=menu_entry %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
     {% include 'footer.html' %}
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -100,7 +94,7 @@
             var formData = $(this).serialize();
             $.ajax({
                 type: "POST",
-                url: "{% url 'wishlistresto:add_to_wishlist' %}",
+                url: "{% url 'wishlistmenu:add_to_wishlistmenu' %}", // Pastikan URL ini cocok dengan urls.py
                 data: formData,
                 success: function(response) {
                     if (response.success) {

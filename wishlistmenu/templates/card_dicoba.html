@@ -1,18 +1,14 @@
 <div class="relative w-full h-52 p-6 shadow-lg rounded-lg bg-white border-2 border-orange-100 hover:shadow-xl transform hover:scale-105 transition duration-200">
     <div class="flex flex-col items-center space-y-3">
-        {% if menu_entry.tried %}  <!-- Mengganti visited dengan tried untuk mencocokkan konteks -->
-            <div class="text-center">
-                <p class="text-xl font-semibold text-orange-700">{{ resto_entry.menu_wanted }}</p> <!-- Menampilkan menu -->
-                <p class="text-lg text-gray-500">Telah dicoba</p>
-            </div>
-        {% endif %}
+        <div class="text-center">
+            <p class="text-xl font-semibold text-orange-700">{{ menu_entry.menu_wanted.menu }}</p> <!-- Judul menu -->
+            <p class="text-sm text-gray-500">Sudah Dicoba</p> <!-- Keterangan Sudah Dicoba -->
+        </div>
         <div class="flex space-x-4 mt-4">
-            {% if resto_entry.tried %}
-                <a href="{% url 'wishlistmenu:not_tried_resto' resto_entry.pk %}" class="bg-orange-600 hover:bg-orange-700 transition duration-200 text-white py-2 px-4 rounded-md text-sm shadow-md">
-                    Batalkan Status Dicoba
-                </a>
-            {% endif %}
-            <a href="{% url 'wishlistmenu:delete_wishlist' resto_entry.pk %}" class="bg-red-500 hover:bg-red-600 transition duration-200 text-white py-2 px-4 rounded-md text-sm shadow-md">
+            <a href="{% url 'wishlistmenu:not_tried_menu' menu_entry.pk %}" class="bg-orange-600 hover:bg-orange-700 transition duration-200 text-white py-2 px-4 rounded-md text-sm shadow-md">
+                Batalkan Status Dicoba
+            </a>
+            <a href="{% url 'wishlistmenu:delete_wishlist' menu_entry.pk %}" class="bg-red-500 hover:bg-red-600 transition duration-200 text-white py-2 px-4 rounded-md text-sm shadow-md">
                 Hapus dari Wishlist
             </a>
         </div>

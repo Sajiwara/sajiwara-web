@@ -1,21 +1,25 @@
 import os
 import csv
-from wishlistresto.models import Restaurant, MenuItem
+from wishlistmenu.models import Menu, Restaurant
+from katalog.models import Restonya  # Menggunakan model Restonya
 
 def import_menu_resto():
     current_dir = os.path.dirname(__file__)
-    path_file = os.path.join(current_dir, "../fixtures/menu_resto_jogja.csv")  # Sesuaikan path file
+    path_file = os.path.join(current_dir, "../fixtures/jogja_dataset.csv")
 
     with open(path_file, "r") as file:
         reader = csv.DictReader(file)
         for row in reader:
-            menu = row['MENU'].strip()
+            menu_name = row['MENU'].strip()
             resto_name = row['RESTO YANG MENYEDIAKAN MENU'].strip()
 
-            # Cek dan simpan restoran
+            # Create or retrieve the restaurant instance
             restaurant, created = Restaurant.objects.get_or_create(name=resto_name)
 
-            # Cek dan simpan menu item
-            if not MenuItem.objects.filter(name=menu, restaurant=restaurant).exists():
-                menu_item = MenuItem(name=menu, restaurant=restaurant)
+            # Check and save the menu item, associating it with the restaurant
+            if not Menu.objects.filter(menu=menu_name, restaurant=restaurant).exists():
+                menu_item = Menu(menu=menu_name, restaurant=restaurant)
                 menu_item.save()
+
+# Call the function to run the import
+import_menu_resto()

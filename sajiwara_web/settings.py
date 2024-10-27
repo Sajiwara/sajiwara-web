@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'wishlistresto',
     'review',
     'tipemakanan',
+    'katalog',
 ]
 
 MIDDLEWARE = [

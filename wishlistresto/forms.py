@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from wishlistresto.models import Resto,WishlistResto
+from katalog.models import Restonya
 
 class SearchRestoForm(ModelForm):
     class Meta:
@@ -8,7 +9,10 @@ class SearchRestoForm(ModelForm):
         fields = ["restaurant"]
 
     restaurant = forms.ModelChoiceField(
-        queryset=Resto.objects.all(),
+        queryset=Restonya.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'}),  # Optional: Styling with Bootstrap
         empty_label="Select a restaurant"
     )
+
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=266, required=False, label='Search restaurant wishlist')
