@@ -45,7 +45,7 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 
 ### **4. Tipe makanan**
 - **Developer : Muhammad Fakhri**
-- Di dalam modul ini pengguna dapat mencari tipe makanan yang diinginkan seperti appetizer, main course, atau dessert. Selain ketiga itu, pengguna juga bisa mencari tipe makanan yang kering, makanan yang berkuah, makanan yang dibakar, cepat saji, kue-kue dan camilan sesuai dengan restoran yang menyediakannya. Jika makanan yang terpilih merupakan makanan daerah atau makanan yang otentik, pengguna dapat melihat bagaimana sejarah tentang makanan tersebut.
+- Di dalam modul ini pengguna dapat mencari tipe makanan yang diinginkan berdasarkan preferensi negara yang dimiliki resto tersebut. Modul ini terbuka untuk user yang belum login atau terautentikasi. Jika yang menggunakan modul ini adalah user yang terautentikasi, maka user dapat mengedit nama resto, preferensi negara, dan variasi menu yang dimiliki oleh resto tersebut.
 
 ### **5. Review**
 - **Developer: Ilham Satya Nusabhakti**
