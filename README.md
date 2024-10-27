@@ -49,7 +49,7 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 
 ### **5. Review**
 - **Developer: Ilham Satya Nusabhakti**
-- Pada modul ini, user dapat memberikan ulasan terhadap tempat-tempat makan yang mereka kunjungi. Isi dari ulasan tersebut adalah penilaian berdasarkan bintang (maksimal 5) dan deskripsi pengalaman user saat makan di tempat tersebut. Deskripsi pengalamannya dapat beragam, bisa deskripsi cita rasa makanan, hal-hal seperti suasana tempat makan, dan lain-lain.
+- Pada modul ini, user yang telah log in dapat memberikan ulasan terhadap tempat-tempat makan yang mereka kunjungi. Deskripsi pengalamannya dapat beragam, bisa deskripsi cita rasa makanan, hal-hal seperti suasana tempat makan, dan lain-lain. Sementara itu,user yang belum login tidak bisa memberikan ulasan namun tetap bisa membaca ulasan yang di post oleh user yang telah login.
 
 ## Dataset
 https://www.kaggle.com/datasets/yudhaislamisulistya/places-to-eat-in-the-jogja-region?select=places_to_eat_in_the_jogja_region.csv 
