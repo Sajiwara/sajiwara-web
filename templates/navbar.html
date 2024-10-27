@@ -14,7 +14,7 @@
             <li><a href="{% url 'search:show_search' %}" class="hover:text-orange-800 transition duration-200">Search</a></li>
             <li><a href="{% url 'tipemakanan:makanan_list' %}" class="hover:text-orange-800 transition duration-200">Explore Makanan</a></li>
             <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800 transition duration-200">Add Wishlist Resto</a></li>
-            <li><a href="#" class="hover:text-orange-800 transition duration-200">Add Wishlist Food</a></li>
+            <li><a href="{% url 'wishlistmenu:show_wishlistmenu' %}" class="hover:text-orange-800 transition duration-200">Add Wishlist Food</a></li>
             <li><a href="{% url 'review:show_main' %}" class="hover:text-orange-800 transition duration-200">See Reviews</a></li>
         </ul>
 
@@ -54,11 +54,18 @@
             <li><a href="{% url 'search:show_search' %}" class="hover:text-orange-800">Search</a></li>
             <li><a href="{% url 'tipemakanan:makanan_list' %}" class="hover:text-orange-800">Explore Makanan</a></li>
             <li><a href="{% url 'wishlistresto:show_wishlistresto' %}" class="hover:text-orange-800">Add Wishlist Resto</a></li>
-            <li><a href="#" class="hover:text-orange-800">Add Wishlist Food</a></li>
+            <li><a href="{% url 'wishlistmenu:show_wishlistmenu' %}" class="hover:text-orange-800">Add Wishlist Food</a></li>
             <li><a href="{% url 'review:show_main' %}" class="hover:text-orange-800">See Reviews</a></li>
         </ul>
     </div>
 </nav>
+
+<script>
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+</script>
 
 <script>
     document.getElementById('mobile-menu-toggle').addEventListener('click', function() {

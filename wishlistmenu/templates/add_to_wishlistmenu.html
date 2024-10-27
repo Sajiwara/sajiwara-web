@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'navbar.html' %} 
+<div class="flex justify-center items-center h-screen bg-orange-100 bg-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-center text-3xl text-orange-700 font-bold">Tambah Menu ke Wishlist</h1>
+        <form id="wishlist-form" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="text-center">
+                <button type="submit" class="bg-orange-500 text-white font-bold py-2 px-4 rounded mt-4">Tambah</button>
+            </div>
+        </form>
+        <div id="response-message" class="text-center mt-4"></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#wishlist-form').submit(function(event) {
+            event.preventDefault(); // Mencegah reload halaman
+
+            var formData = $(this).serialize(); // Ambil data form
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'wishlistmenu:add_to_wishlist' %}", // Endpoint yang digunakan
+                data: formData,
+                success: function(response) {
+                    // Jika berhasil, tampilkan pesan sukses
+                    if (response.success) {
+                        $('#response-message').html(
+                            '<p class="text-green-500">' + response.message + '</p>'
+                        );
+                    } else {
+                        // Jika gagal, tampilkan pesan error
+                        $('#response-message').html(
+                            '<p class="text-red-500">' + response.message + '</p>'
+                        );
+                    }
+                },
+                error: function() {
+                    $('#response-message').html(
+                        '<p class="text-red-500">Terjadi kesalahan. Coba lagi nanti.</p>'
+                    );
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}
