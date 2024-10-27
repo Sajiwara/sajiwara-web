@@ -5,9 +5,6 @@ from django.core import serializers
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.contrib.auth.decorators import login_required
-
-
 
 def show_search(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':

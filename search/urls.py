@@ -1,6 +1,5 @@
 from django.urls import path
 from search.views import show_search,show_xml,show_json,show_json_by_id,show_xml_by_id
-from review.views import restaurant_detail
 
 app_name = 'search'
 
