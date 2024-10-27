@@ -42,21 +42,19 @@ def add_to_wishlistmenu(request):
                 wishlist_item.wanted_menu = True
                 wishlist_item.save()
 
-            # AJAX response
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Menu berhasil ditambahkan ke wishlist!',
-                    'menu': wishlist_item.menu_wanted.menu
-                })
-
-        # Jika menu_id tidak valid
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            # Mengembalikan respons JSON jika permintaan adalah AJAX
             return JsonResponse({
-                'success': False,
-                'message': 'Gagal menambahkan restoran. Periksa form Anda.'
+                'success': True,
+                'message': 'Menu berhasil ditambahkan ke wishlist!'
             })
 
+        # Jika menu_id tidak valid, kembalikan respons JSON kesalahan
+        return JsonResponse({
+            'success': False,
+            'message': 'Gagal menambahkan menu. Periksa form Anda.'
+        }, status=400)
+
+    # Kembalikan halaman biasa jika bukan permintaan POST
     menus = Menu.objects.all()
     context = {'menus': menus}
     return render(request, "show_wishlistmenu.html", context)
@@ -70,6 +68,7 @@ def tried_menu(request, id):
     menu_item.save()  # Save the changes
     return HttpResponseRedirect(reverse('wishlistmenu:show_wishlistmenu'))
 
+# View untuk menandai item sebagai belum dicoba
 @csrf_exempt
 def not_tried_menu(request, id):
     menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)  # Get menu item for the user
@@ -77,6 +76,7 @@ def not_tried_menu(request, id):
     menu_item.save()
     return HttpResponseRedirect(reverse('wishlistmenu:show_wishlistmenu'))
 
+# View untuk menghapus item dari wishlist
 @csrf_exempt
 def delete_wishlist(request, id):
     menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)  # Get menu item for the user

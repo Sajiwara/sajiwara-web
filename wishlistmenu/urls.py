@@ -1,7 +1,7 @@
 from django.urls import path
 from wishlistmenu.views import show_wishlistmenu, add_to_wishlistmenu, tried_menu, delete_wishlist, not_tried_menu
 
-app_name = 'wishlistmenu'  # Make sure the app name matches
+app_name = 'wishlistmenu' 
 
 urlpatterns = [
     path('', show_wishlistmenu, name='show_wishlistmenu'),
