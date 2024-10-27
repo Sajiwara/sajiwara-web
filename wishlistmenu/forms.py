@@ -1,11 +1,13 @@
 from django import forms
-from .models import WishlistMenu
+from .models import WishlistMenu, Menu
 
-class WishlistForm(forms.ModelForm):
+class WishlistMenuForm(forms.ModelForm):
+    menu = forms.ModelChoiceField(
+        queryset=Menu.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Select Menu"
+    )
+
     class Meta:
         model = WishlistMenu
-        fields = ['menu_name', 'resto_name']
-        widgets = {
-            'menu_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Menu'}),
-            'resto_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Resto'}),
-        }
+        fields = ['menu']

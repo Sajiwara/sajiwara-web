@@ -1,19 +1,21 @@
 import os
 import csv
-from wishlistmenu.models import Menu
+from wishlistresto.models import Restaurant, MenuItem
 
-def runwishlistmenu():
+def import_menu_resto():
     current_dir = os.path.dirname(__file__)
-    path_file = os.path.join(current_dir, "../fixtures/jogja_dataset.csv")
+    path_file = os.path.join(current_dir, "../fixtures/menu_resto_jogja.csv")  # Sesuaikan path file
 
     with open(path_file, "r") as file:
-        read = csv.DictReader(file)
-        for row in read:
-            # Mengambil nama restoran dan menu dari file CSV
-            restoran = row['Nama Restoran'].strip()
-            menu = row['Variasi Makanan'].strip()  # Sesuaikan nama kolom dengan yang ada di CSV
+        reader = csv.DictReader(file)
+        for row in reader:
+            menu = row['MENU'].strip()
+            resto_name = row['RESTO YANG MENYEDIAKAN MENU'].strip()
 
-            # Cek apakah menu sudah ada untuk restoran ini, jika tidak tambahkan
-            if not Menu.objects.filter(resto=restoran, menu=menu).exists():
-                menu_obj = Menu(resto=restoran, menu=menu)
-                menu_obj.save()
+            # Cek dan simpan restoran
+            restaurant, created = Restaurant.objects.get_or_create(name=resto_name)
+
+            # Cek dan simpan menu item
+            if not MenuItem.objects.filter(name=menu, restaurant=restaurant).exists():
+                menu_item = MenuItem(name=menu, restaurant=restaurant)
+                menu_item.save()

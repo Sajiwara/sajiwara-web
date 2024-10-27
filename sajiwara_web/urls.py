@@ -22,4 +22,7 @@ urlpatterns = [
     path('', include('landingpage.urls')),
     path('search/', include('search.urls')),
     path('wishlist/', include('wishlistresto.urls')),
+    path('wishlistmenu/', include('wishlistmenu.urls')),
+    path('review/', include('review.urls')),
+    path('tipemakanan/', include('tipemakanan.urls', namespace='tipemakanan')),
 ]

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'wishlistmenu',
     'authentication',
     'wishlistresto',
+    'review',
+    'tipemakanan',
 ]
 
 MIDDLEWARE = [
