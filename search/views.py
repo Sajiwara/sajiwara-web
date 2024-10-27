@@ -5,7 +5,7 @@ from django.core import serializers
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -17,8 +17,6 @@ def show_search(request):
         query_rating = request.GET.get('rating')
         sort_by = request.GET.get('sort_by', 'nama')
        
-
-
         restaurants = Restaurant.objects.all()
 
         if query_name:

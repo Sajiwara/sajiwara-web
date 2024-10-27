@@ -13,6 +13,8 @@
             </svg>
             Cari Restoran
         </button>
+        
+        
         {% if not user.is_authenticated %}
             <p class="text-center text-gray-500">Login untuk melihat informasi lebih lengkap mengenai restoran</p>
         {% endif %}
@@ -98,28 +100,11 @@
             </div>
         </div>
     </div>
-
     
-
-
     <div id="searchResults" class="mt-10">
         <div id="rotating-text-container"></div>
-    
     </div>
     
-
-    <!-- Modal untuk Riwayat Pencarian -->
-    <div id="historyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="fixed inset-0 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-                <h2 class="text-2xl font-bold mb-6">Riwayat Pencarian</h2>
-                <div id="historyResults"></div>
-                <button id="closeHistoryModal" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
 </div>
 {% include 'footer.html' %}
 

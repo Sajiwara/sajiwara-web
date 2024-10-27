@@ -18,4 +18,3 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return f"{self.nama} {self.jenis_makanan} {self.rating} {self.harga} {self.jarak} {self.suasana} {self.entertainment} {self.keramaian}"
-    
