@@ -32,7 +32,7 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 ## Daftar Modul yang akan Diimplementasikan 
 ### **1. Wishlist restoran**
 - **Developer: Theresia Tarianingsih**
-- Wishlist restoran merupakan modul dimana pengguna menyimpan sebuah restoran yang ingin mereka kunjungi. Pengguna dapat menambahkan 1 atau lebih restoran yang ingin dikunjungi dalam modul ini yang memuat seluruh informasi yang dimiliki restoran. Jika sudah dikunjungi pengguna dapat mengubah status wishlist tersebut menjadi “visited”.
+- Wishlist restoran merupakan modul dimana pengguna menyimpan sebuah restoran yang ingin mereka kunjungi. Pengguna dapat menambahkan 1 atau lebih restoran yang ingin dikunjungi dalam modul ini. Jika sudah dikunjungi pengguna dapat mengubah status wishlist tersebut menjadi “visited”.
 
 ### **2. Wishlist Makanan**
 - **Developer: Rizki Hidayatul Laeli**
