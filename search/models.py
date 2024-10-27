@@ -1,6 +1,9 @@
 from django.db import models
-
 import uuid
+from django.contrib.auth.models import User  
+
+
+
 class Restaurant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nama = models.CharField(max_length=255)
@@ -8,6 +11,11 @@ class Restaurant(models.Model):
     rating = models.FloatField()
     harga = models.IntegerField()
     jarak = models.FloatField()
+    suasana = models.CharField(max_length=266)
+    entertainment = models.IntegerField()
+    keramaian = models.IntegerField()
+
 
     def __str__(self):
-        return f"{self.nama} {self.jenis_makanan} {self.rating} {self.harga} {self.jarak}"
+        return f"{self.nama} {self.jenis_makanan} {self.rating} {self.harga} {self.jarak} {self.suasana} {self.entertainment} {self.keramaian}"
+    

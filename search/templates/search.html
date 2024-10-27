@@ -7,12 +7,16 @@
 <div class="container mx-auto mt-10 min-h-screen">
     <!-- Search Button to Open Modal -->
     <div class="text-center">
-        <button id="openSearchModal" class="bg-orange-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400">
+        <button id="opensearchModal" class="bg-orange-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
             </svg>
             Cari Restoran
         </button>
+        {% if not user.is_authenticated %}
+            <p class="text-center text-gray-500">Login untuk melihat informasi lebih lengkap mengenai restoran</p>
+        {% endif %}
+        
     </div>
 
     <!-- Search Modal -->
@@ -22,7 +26,7 @@
                 <!-- Modal Header -->
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold">Cari Restoran</h2>
-                    <button id="closeSearchModal" class="text-gray-500 hover:text-gray-700">
+                    <button id="closesearchModal" class="text-gray-500 hover:text-gray-700">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -95,9 +99,26 @@
         </div>
     </div>
 
-    <!-- Search Results Container -->
+    
+
+
     <div id="searchResults" class="mt-10">
-        <p class="text-center text-xl text-gray-500">Mau makan apa hari ini?</p>
+        <div id="rotating-text-container"></div>
+    
+    </div>
+    
+
+    <!-- Modal untuk Riwayat Pencarian -->
+    <div id="historyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-8 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <h2 class="text-2xl font-bold mb-6">Riwayat Pencarian</h2>
+                <div id="historyResults"></div>
+                <button id="closeHistoryModal" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                    Tutup
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 {% include 'footer.html' %}
@@ -106,30 +127,31 @@
 
 <script>
     // Modal Elements
-    const modal = document.getElementById('searchModal');
-    const openModalBtn = document.getElementById('openSearchModal');
-    const closeModalBtn = document.getElementById('closeSearchModal');
+    const searchModal = document.getElementById('searchModal');
+    const opensearchModalBtn = document.getElementById('opensearchModal');
+    const closeSearchModalBtn = document.getElementById('closesearchModal');
     const searchForm = document.getElementById('searchForm');
     const resetFormBtn = document.getElementById('resetForm');
 
+    
     // Modal Functions
     function openModal() {
-        modal.classList.remove('hidden');
+        searchModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-        modal.classList.add('hidden');
+        searchModal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
 
     // Event Listeners
-    openModalBtn.addEventListener('click', openModal);
-    closeModalBtn.addEventListener('click', closeModal);
+    opensearchModalBtn.addEventListener('click', openModal);
+    closeSearchModalBtn.addEventListener('click', closeModal);
     
-    // Close modal when clicking outside
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+    // Close searchModal when clicking outside
+    searchModal.addEventListener('click', (e) => {
+        if (e.target === searchModal) {
             closeModal();
         }
     });
@@ -154,7 +176,7 @@
         .then(response => response.json())
         .then(data => {
             document.getElementById('searchResults').innerHTML = data.html;
-            closeModal(); // Close modal after search
+            closeModal(); // Close searchModal after search
         })
         .catch(error => {
             console.error('Error:', error);
@@ -164,39 +186,38 @@
     // Form Submit Event
     searchForm.addEventListener('submit', performSearch);
 
-    const searchInput = document.getElementById('search-input');
-    const searchIcon = document.getElementById('search-icon');
+    
+    // Tambahkan kode React di bawah ini
+    const RotatingText = () => {
+        const [currentIndex, setCurrentIndex] = React.useState(0);
+        
+        const phrases = [
+        "Mau makan apa hari ini?",
+        "Arep mangan opo dino iki?",
+        "What do you want to eat today?"
+        ];
+        
+        React.useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % phrases.length);
+        }, 3000);
+        
+        return () => clearInterval(interval);
+        }, []);
+        
+        return React.createElement(
+        'p',
+        { className: "text-center text-xl text-gray-500 transition-opacity duration-500 ease-in-out" },
+        phrases[currentIndex]
+        );
+    };
+    
+    // Render komponen
+    const root = ReactDOM.createRoot(document.getElementById('rotating-text-container'));
+    root.render(React.createElement(RotatingText));
+        
+        
 
-    function hideIcon() {
-        searchIcon.style.opacity = '0'; // Mengubah opacity menjadi 0
-        setTimeout(() => {
-            searchIcon.style.display = 'none'; // Menghilangkan ikon setelah transisi
-        }, 300); // Waktu yang sama dengan durasi transisi
-    }
-
-    function showIcon() {
-        searchIcon.style.display = 'flex'; // Menampilkan ikon
-        setTimeout(() => {
-            searchIcon.style.opacity = '1'; // Mengubah opacity menjadi 1
-        }, 0); // Waktu yang sama dengan durasi transisi
-    }
-
-    searchInput.addEventListener('click', hideIcon);
-    searchIcon.addEventListener('click', hideIcon);
-
-    searchInput.addEventListener('blur', function() {
-        if (searchInput.value === '') {
-            showIcon();
-        }
-    });
-
-    searchInput.addEventListener('input', function() {
-        if (searchInput.value === '') {
-            showIcon();
-        } else {
-            hideIcon();
-        }
-    });
 </script>
 
 {% endblock content %}
