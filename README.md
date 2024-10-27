@@ -36,7 +36,7 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 
 ### **2. Wishlist Makanan**
 - **Developer: Rizki Hidayatul Laeli**
-- Wishlist Makanan adalah modul yang memungkinkan pengguna untuk menyimpan daftar makanan/minuman yang ingin mereka coba di restoran. Pengguna dapat menambahkan satu atau lebih makanan/minuman ke dalam wishlist mereka. Setelah mencoba makanan/minuman tersebut, pengguna dapat memberikan review melalui modul review.
+- Wishlist Makanan adalah modul yang memungkinkan pengguna untuk menyimpan daftar makanan/minuman yang ingin mereka coba. Pengguna dapat menambahkan satu atau lebih makanan/minuman ke dalam wishlist mereka. Setelah mencoba makanan/minuman tersebut, pengguna dapat mengubah statusnya menjadi telah dicoba.
 
 
 ### **3. Search & filter**
