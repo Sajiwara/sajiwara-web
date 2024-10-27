@@ -1,27 +1,34 @@
-{% load static %}
 <div class="bg-gray-200 p-6 shadow-lg rounded-lg">
     <div class="flex justify-between items-center">
         <h3 class="text-xl font-semibold text-center w-full">{{ restaurant.nama }}</h3>
     </div>
     <div class="flex justify-between items-start mt-2">
-        {% if restaurant.jenis_makanan == "Indonesia" %}
-            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">
-        {% elif restaurant.jenis_makanan == "Middle Eastren"%}
-            <img src="{% static 'image/arabian.png' %}" alt="Bendera Arab" class="w-6 h-auto">
-        {% elif restaurant.jenis_makanan == "Western"%}
-            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">  
-        {% elif restaurant.jenis_makanan == "Japanese"%}
-            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">  
-        {% elif restaurant.jenis_makanan == "Chinese"%}
-            <img src="{% static 'image/indonesian.png' %}" alt="Bendera Indonesia" class="w-6 h-auto">        
-        {% else %}
-            <p class="text-gray-700">{{ restaurant.jenis_makanan }}</p>
-        {% endif %}
-        <div class="text-right">
-            <p class="text-gray-700">Rating:</p>
-            <p class="text-yellow-500 text-2xl">{{ restaurant.rating }}</p>
+        <p class="text-gray-700">Jenis makanan : {{ restaurant.jenis_makanan }}</p>
+        <div class="text-center">
+            <p class="text-gray-700">Rating</p>
+            <p class="text-yellow-500 text-2xl font-bold">{{ restaurant.rating }}</p>
+            <!-- Menambahkan bintang di bawah rating -->
+            <div class="flex justify-center mt-1">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= restaurant.rating %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     <p class="text-gray-600">Harga rata-rata: Rp.{{ restaurant.harga }}</p>
     <p class="text-gray-600">Jarak (dari titik 0 jogja): {{ restaurant.jarak }} km</p>
+
+    {% if is_authenticated %}
+        <p class="text-gray-600">Suasana: {{ restaurant.suasana }}</p>
+        <p class="text-gray-600">Entertainment: {{ restaurant.entertainment }}</p>
+        <p class="text-gray-600">Keramaian: {{ restaurant.keramaian }}</p>
+    {% endif %}
 </div>

@@ -23,7 +23,17 @@ def runsearch():
 
             jarak_str = row['Lokasi Restoran'].strip()
             jarak = float(jarak_str.replace(' km', '')) 
+
+            suasana = row['Jenis Suasana']
+            suasana = suasana.strip()
+
+            entertainment = row['Entertainment']
+            entertainment = entertainment.strip()
+
+            keramaian = row['Keramaian Restoran']
+            keramaian = keramaian.strip()
+
             
-            if not Restaurant.objects.filter(nama=restoran,jenis_makanan =jenis,rating = rating,harga=harga,jarak=jarak).exists():
-                restoran_obj = Restaurant(nama=restoran,jenis_makanan=jenis,rating=rating,harga=harga,jarak=jarak)
+            if not Restaurant.objects.filter(nama=restoran,jenis_makanan =jenis,rating = rating,harga=harga,jarak=jarak,suasana=suasana,entertainment=entertainment,keramaian=keramaian).exists():
+                restoran_obj = Restaurant(nama=restoran,jenis_makanan=jenis,rating=rating,harga=harga,jarak=jarak,suasana=suasana,entertainment=entertainment,keramaian=keramaian)
                 restoran_obj.save()
