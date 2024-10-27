@@ -41,7 +41,7 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 
 ### **3. Search & filter**
 - **Developer : Fadhlurohman Dzaki**
-- Modul ini berguna untuk memfilter dan mencari restoran berdasarkan kriteria yang diinginkan oleh user, seperti jenis makanan, lokasi, harga, dan ulasan pengguna (review).
+- Modul ini berguna untuk memfilter dan mencari restoran berdasarkan kriteria yang diinginkan oleh user, seperti jenis makanan, lokasi, harga, dan ulasan pengguna (rating).
 
 ### **4. Tipe makanan**
 - **Developer : Muhammad Fakhri**
