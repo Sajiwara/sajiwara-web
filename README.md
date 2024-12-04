@@ -32,24 +32,24 @@ Proyek pembuatan website informasi restoran ini dilatarbelakangi oleh kebutuhan 
 ## Daftar Modul yang akan Diimplementasikan 
 ### **1. Wishlist restoran**
 - **Developer: Theresia Tarianingsih**
-- Wishlist restoran merupakan modul dimana pengguna menyimpan sebuah restoran yang ingin mereka kunjungi. Pengguna dapat menambahkan 1 atau lebih restoran yang ingin dikunjungi dalam modul ini yang memuat seluruh informasi yang dimiliki restoran. Jika sudah dikunjungi pengguna dapat mengubah status wishlist tersebut menjadi “visited”.
+- Wishlist restoran merupakan modul dimana pengguna menyimpan sebuah restoran yang ingin mereka kunjungi. Pengguna dapat menambahkan 1 atau lebih restoran yang ingin dikunjungi dalam modul ini. Jika sudah dikunjungi pengguna dapat mengubah status wishlist tersebut menjadi “visited”.
 
 ### **2. Wishlist Makanan**
 - **Developer: Rizki Hidayatul Laeli**
-- Wishlist Makanan adalah modul yang memungkinkan pengguna untuk menyimpan daftar makanan/minuman yang ingin mereka coba di restoran. Pengguna dapat menambahkan satu atau lebih makanan/minuman ke dalam wishlist mereka. Setelah mencoba makanan/minuman tersebut, pengguna dapat memberikan review melalui modul review.
+- Wishlist Makanan adalah modul yang memungkinkan pengguna untuk menyimpan daftar makanan/minuman yang ingin mereka coba. Pengguna dapat menambahkan satu atau lebih makanan/minuman ke dalam wishlist mereka. Setelah mencoba makanan/minuman tersebut, pengguna dapat mengubah statusnya menjadi telah dicoba.
 
 
 ### **3. Search & filter**
 - **Developer : Fadhlurohman Dzaki**
-- Modul ini berguna untuk memfilter dan mencari restoran berdasarkan kriteria yang diinginkan oleh user, seperti jenis makanan, lokasi, harga, dan ulasan pengguna (review).
+- Modul ini berguna untuk memfilter dan mencari restoran berdasarkan kriteria yang diinginkan oleh user, seperti jenis makanan, lokasi, harga, dan ulasan pengguna (rating).
 
 ### **4. Tipe makanan**
 - **Developer : Muhammad Fakhri**
-- Di dalam modul ini pengguna dapat mencari tipe makanan yang diinginkan seperti appetizer, main course, atau dessert. Selain ketiga itu, pengguna juga bisa mencari tipe makanan yang kering, makanan yang berkuah, makanan yang dibakar, cepat saji, kue-kue dan camilan sesuai dengan restoran yang menyediakannya. Jika makanan yang terpilih merupakan makanan daerah atau makanan yang otentik, pengguna dapat melihat bagaimana sejarah tentang makanan tersebut.
+- Di dalam modul ini pengguna dapat mencari tipe makanan yang diinginkan berdasarkan preferensi negara yang dimiliki resto tersebut. Modul ini terbuka untuk user yang belum login atau terautentikasi. Jika yang menggunakan modul ini adalah user yang terautentikasi, maka user dapat mengedit nama resto, preferensi negara, dan variasi menu yang dimiliki oleh resto tersebut.
 
 ### **5. Review**
 - **Developer: Ilham Satya Nusabhakti**
-- Pada modul ini, user dapat memberikan ulasan terhadap tempat-tempat makan yang mereka kunjungi. Isi dari ulasan tersebut adalah penilaian berdasarkan bintang (maksimal 5) dan deskripsi pengalaman user saat makan di tempat tersebut. Deskripsi pengalamannya dapat beragam, bisa deskripsi cita rasa makanan, hal-hal seperti suasana tempat makan, dan lain-lain.
+- Pada modul ini, user yang telah log in dapat memberikan ulasan terhadap tempat-tempat makan yang mereka kunjungi. Deskripsi pengalamannya dapat beragam, bisa deskripsi cita rasa makanan, hal-hal seperti suasana tempat makan, dan lain-lain. Sementara itu,user yang belum login tidak bisa memberikan ulasan namun tetap bisa membaca ulasan yang di post oleh user yang telah login.
 
 ## Dataset
 https://www.kaggle.com/datasets/yudhaislamisulistya/places-to-eat-in-the-jogja-region?select=places_to_eat_in_the_jogja_region.csv 
