@@ -28,9 +28,9 @@ SECRET_KEY = 'django-insecure-^h3l%@8=q@dx$#@i1d8-w1qg26&ni)0a&&l=b&(6ny0^igcp$t
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id", "10.0.2.2", "http://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/", "https://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id", "10.0.2.2"]
 
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/", "https://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/"]
 # Application definition
 
 INSTALLED_APPS = [
