@@ -30,7 +30,7 @@ DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id", "10.0.2.2"]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/", "https://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id/"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost","http://127.0.0.1","http://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id", "https://theresia-tarianingsih-sajiwaraweb.pbp.cs.ui.ac.id"]
 # Application definition
 
 INSTALLED_APPS = [
