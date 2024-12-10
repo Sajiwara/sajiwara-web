@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from .models import WishlistMenu, Menu  # Ensure you import the correct models
+from .models import WishlistMenu, Menu, Restaurant  # Ensure you import the correct models
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
@@ -24,11 +24,27 @@ def show_wishlistmenu(request):
     return render(request, 'show_wishlistmenu.html', context)
 
 @csrf_exempt
+def show_menus(request):
+    menus = Menu.objects.values_list('menu', flat=True).distinct()
+    menu_list = list(menus)
+    return JsonResponse(menu_list, safe=False)
+
+@csrf_exempt
+def show_restaurants(request):
+    menu = request.GET.get('menu', None)
+    restaurants = Restaurant.objects.filter(
+        menus__menu__icontains=menu
+    ).distinct()
+    restaurant_list = list(restaurants.values())
+    return JsonResponse(restaurant_list, safe=False)
+
+@csrf_exempt
 def add_to_wishlistmenu(request):
     if request.method == "POST":
-        menu_id = request.POST.get('menu')  # Ambil ID menu dari form
-        if menu_id:
-            menu_instance = get_object_or_404(Menu, id=menu_id)  # Ambil instance Menu berdasarkan ID
+        menu_name = request.POST.get('menu')  # Ambil nama menu dari form
+        restaurant_id = request.POST.get('restaurant')
+        if menu_name and restaurant_id:
+            menu_instance = get_object_or_404(Menu, menu=menu_name, restaurant = restaurant_id)  # Ambil instance Menu berdasarkan ID
 
             # Tambahkan menu ke wishlist untuk user yang sedang login
             wishlist_item, created = WishlistMenu.objects.get_or_create(
