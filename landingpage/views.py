@@ -39,6 +39,7 @@ def show_landingpage(request):
 
     return render(request, "landingpage.html", context)
 
+@csrf_exempt
 def register(request):
     form = UserCreationForm() 
 
