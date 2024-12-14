@@ -77,84 +77,6 @@ def add_to_wishlist(request):
     context = {'form': SearchRestoForm(), 'restos': restos}
     return render(request, "show_wishlistresto.html", context)
 
-
-# @csrf_exempt
-# def add_to_wishlist_flutter(request):
-#     if request.method == "POST":
-#         try:
-#             # Parsing JSON data from the request body
-#             data = json.loads(request.body)
-            
-#             # Extract restaurant name from the request
-#             restaurant_name = data.get('restaurant')  # Menggunakan 'restaurant' untuk mengambil nama restoran
-#             user = request.user  # Get the current user from the request
-
-#             # Check if the restaurant exists in the Restonya model
-#             try:
-#                 resto_instance = Restonya.objects.get(restaurant=restaurant_name)
-#             except Restonya.DoesNotExist:
-#                 return JsonResponse({
-#                     'success': False,
-#                     'message': 'Restoran tidak ditemukan di database!'
-#                 })
-
-#             # Check if the restaurant already exists in the wishlist for the user
-#             resto, created = WishlistResto.objects.get_or_create(
-#                 restaurant_wanted=restaurant_name,
-#                 user=user,
-#                 defaults={'wanted_resto': True}
-#             )
-
-#             # If the restaurant already existed, just update wanted_resto
-#             if not created:
-#                 resto.wanted_resto = True
-#                 resto.save()  # Save changes
-
-#             # Return a successful response
-#             return JsonResponse({
-#                 'success': True,
-#                 'message': 'Restoran berhasil ditambahkan ke wishlist!',
-#                 'restaurant': resto.restaurant_wanted  # Return the name of the restaurant
-#             })
-
-#         except json.JSONDecodeError:
-#             return JsonResponse({
-#                 'success': False,
-#                 'message': 'Data JSON tidak valid!'
-#             })
-
-#         except Exception as e:
-#             return JsonResponse({
-#                 'success': False,
-#                 'message': f'Terjadi kesalahan: {str(e)}'
-#             })
-
-#     # Return a 405 Method Not Allowed response for non-POST requests
-#     return JsonResponse({
-#         'success': False,
-#         'message': 'Metode tidak diizinkan!'
-#     })
-
-# @csrf_exempt
-# def add_to_wishlist_flutter(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             restaurant = data.get('restaurant', None)
-
-#             if restaurant:
-#                 # Simpan ke database
-#                 WishlistResto.objects.create(
-#                     restaurant_wanted=restaurant,
-#                     user=request.user,
-#                     wanted_resto = True,
-#                     visited_resto = False,
-#                 )
-#                 return JsonResponse({'status': 'success'}, status=200)
-#             return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
-#         except Exception as e:
-#             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
 @csrf_exempt
 def add_to_wishlist_flutter(request):
     if request.method == 'POST':
@@ -181,44 +103,39 @@ def add_to_wishlist_flutter(request):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+@csrf_exempt
+def visited_resto_flutter(request, id):
+    if request.method == "POST":
+        # Pastikan user sudah login
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                "status": False,
+                "message": "User is not authenticated"
+            }, status=401)
 
-# @csrf_exempt
-# def add_to_wishlist(request):
-#     if request.method == "POST":
-#         restaurant_id = request.POST.get('restaurant_id')  # Mengambil ID dari request
-#         if restaurant_id:
-#             resto_instance = get_object_or_404(Restonya, id=restaurant_id)  # Ambil resto berdasarkan ID
+        # Ambil objek WishlistResto yang sesuai
+        try:
+            resto = get_object_or_404(WishlistResto, pk=id, user=request.user)
+        except WishlistResto.DoesNotExist:
+            return JsonResponse({
+                "status": False,
+                "message": "Restaurant not found"
+            }, status=404)
 
-#             # Tambahkan resto ke wishlist untuk user saat ini
-#             resto, created = WishlistResto.objects.get_or_create(
-#                 restaurant_wanted=resto_instance.restaurant,  # Mengambil nama restoran
-#                 user=request.user,
-#                 defaults={'wanted_resto': True}
-#             )
+        # Tandai restoran sebagai "visited"
+        resto.visited = True
+        resto.save()
 
-#             if not created:
-#                 resto.wanted_resto = True
-#                 resto.save()
+        return JsonResponse({
+            "status": True,
+            "message": f"Restaurant '{resto.restaurant_wanted}' marked as visited!"
+        })
 
-#             # AJAX response
-#             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#                 return JsonResponse({
-#                     'success': True,
-#                     'message': 'Restoran berhasil ditambahkan ke wishlist!',
-#                     'restaurant': resto.restaurant_wanted
-#                 })
-
-#         # Jika restaurant_id tidak ada atau invalid
-#         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#             return JsonResponse({
-#                 'success': False,
-#                 'message': 'Gagal menambahkan restoran. Periksa form Anda.'
-#             })
-
-#     # Load restoran untuk template
-#     restos = Restonya.objects.all()
-#     context = {'form': SearchRestoForm(), 'restos': restos}
-#     return render(request, "show_wishlistresto.html", context)
+    # Jika bukan POST request, kirimkan error
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid request method"
+    }, status=400)
 
 @csrf_exempt
 def visited_resto(request, id):
@@ -233,6 +150,14 @@ def not_visited_resto(request, id):
     resto.visited = False
     resto.save()
     return HttpResponseRedirect(reverse('wishlistresto:show_wishlistresto'))
+
+@csrf_exempt
+def delete_wishlist_flutter(request, id):
+    if request.method == "POST":  # Gunakan POST untuk menggantikan DELETE
+        resto = get_object_or_404(WishlistResto, pk=id, user=request.user)
+        resto.delete()
+        return JsonResponse({"status": True, "message": "Wishlist deleted successfully."})
+    return JsonResponse({"status": False, "message": "Invalid request method."}, status=400)
 
 @csrf_exempt
 def delete_wishlist(request, id):
