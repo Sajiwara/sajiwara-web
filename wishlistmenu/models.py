@@ -7,18 +7,6 @@ from django.core import serializers
 # Model untuk Restoran, menyimpan informasi nama restoran
 class Restaurant(models.Model):
     name = models.CharField(max_length=266)  # Nama restoran
-    # food_preference = models.CharField(max_length=266, default="General")  # Preferensi makanan
-    # location = models.CharField(max_length=500, default="Unknown")  # Lokasi restoran
-    # price_average = models.IntegerField(default=0)  # Rata-rata harga makanan
-    # rating = models.FloatField(default=0.0)  # Rating restoran
-    # atmosphere_type = models.CharField(max_length=266, default="Casual")  # Jenis atmosfer restoran
-    # often_discounted = models.BooleanField(default=False)  # Apakah sering diskon
-    # special_service_for_couples = models.BooleanField(default=False)  # Layanan spesial untuk pasangan
-    # entertainment = models.IntegerField(default=0)  # Level hiburan
-    # crowd = models.IntegerField(default=0)  # Level keramaian
-    # service_type = models.CharField(max_length=266, default="Dine-in")  # Jenis layanan
-    # menu_type = models.CharField(max_length=266, default="Ala Carte")  # Jenis menu (all you can eat atau ala carte)
-
     def __str__(self):
         return self.name
 
