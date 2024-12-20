@@ -1,4 +1,4 @@
-from django.views import View
+import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -6,9 +6,6 @@ from .models import WishlistMenu, Menu, Restaurant  # Ensure you import the corr
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
-from django.utils.decorators import method_decorator
-import json
-
 
 @csrf_exempt
 @login_required(login_url='/login')
@@ -91,7 +88,7 @@ def tried_menu(request, id):
 # View untuk menandai item sebagai belum dicoba
 @csrf_exempt
 def not_tried_menu(request, id):
-    menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)  
+    menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)  # Get menu item for the user
     menu_item.tried = False
     menu_item.save()
     return HttpResponseRedirect(reverse('wishlistmenu:show_wishlistmenu'))
@@ -99,138 +96,100 @@ def not_tried_menu(request, id):
 # View untuk menghapus item dari wishlist
 @csrf_exempt
 def delete_wishlist(request, id):
-    menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user) 
+    menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)  # Get menu item for the user
     menu_item.delete()
     return HttpResponseRedirect(reverse('wishlistmenu:show_wishlistmenu'))
 
 def show_json(request):
+    # Fetch wishlist items for the logged-in user
     data = WishlistMenu.objects.filter(user=request.user, wanted_menu=True)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    
+    # Modify the data to include the menu name by looking up the corresponding menu object
+    wishlist_data = []
+    for item in data:
+        # Add the menu name to the response
+        menu_name = item.menu_wanted.menu if item.menu_wanted else None
+        wishlist_data.append({
+            "model": "wishlistmenu.wishlistmenu",
+            "pk": str(item.pk),
+            "fields": {
+                "menu_wanted": menu_name,  # Instead of ID, return the menu name
+                "user": item.user.id,
+                "wanted_menu": item.wanted_menu,
+                "tried": item.tried
+            }
+        })
+    
+    return HttpResponse(json.dumps(wishlist_data), content_type="application/json")
 
 def get_json_menu_data(request):
     qs_val = list(Menu.objects.values())
     return JsonResponse({'data': qs_val})
 
-
 @csrf_exempt
-def show_wishlistmenu_api(request):
-    menus = Menu.objects.filter(wishlistmenu__user=request.user).distinct()
-    menus_data = [{'id': menu.id, 'menu': menu.menu, 'restaurant': menu.restaurant.name} for menu in menus]
-
-    wishlist_menus = WishlistMenu.objects.filter(user=request.user)
-    wishlist_data = [
-        {
-            'id': item.id,
-            'menu_name': item.menu_wanted.menu,
-            'restaurant_name': item.menu_wanted.restaurant.name,
-            'tried': item.tried
-        } for item in wishlist_menus
-    ]
-
-    tried_menus = WishlistMenu.objects.filter(user=request.user, tried=True)
-    tried_data = [
-        {
-            'id': item.id,
-            'menu_name': item.menu_wanted.menu,
-            'restaurant_name': item.menu_wanted.restaurant.name
-        } for item in tried_menus
-    ]
-
-    return JsonResponse({
-        'menus': menus_data,
-        'wishlist_menus': wishlist_data,
-        'tried_menus': tried_data
-    }, safe=False)
-
-@csrf_exempt
-def show_menus_api(request):
-    menus = Menu.objects.values_list('menu', flat=True).distinct()
-    menu_list = list(menus)
-    return JsonResponse({'menus': menu_list})
-
-@csrf_exempt
-def show_restaurants_api(request):
-    menu = request.GET.get('menu', None)
-    restaurants = Restaurant.objects.filter(menus__menu__icontains=menu).distinct()
-    restaurant_list = list(restaurants.values())
-    return JsonResponse({'restaurants': restaurant_list})
-
-@csrf_exempt
-@login_required(login_url='/login')
-def add_wishlistmenu_api(request):
-    if request.method == "POST":
+def add_to_wishlist_flutter(request):
+    if request.method == 'POST':
         try:
+            if not request.user.is_authenticated:
+                return JsonResponse({'status': 'error', 'message': 'User must be logged in'}, status=401)
+
             data = json.loads(request.body)
-            menu_name = data.get('menu')
-            restaurant_id = data.get('restaurant')
+            print("Data yang diterima: ", data)  # Debugging untuk melihat payload dari Flutter
 
-            if menu_name and restaurant_id:
-                menu_instance = get_object_or_404(Menu, menu=menu_name, restaurant=restaurant_id)
+            new_wishlist = WishlistMenu.objects.create(
+                user=request.user,
+                menu_wanted=data.get('menu_wanted'),
+                wanted_menu=data.get('wanted_menu'),
+                tried=data.get('tried'),
+            )
 
-                wishlist_item, created = WishlistMenu.objects.get_or_create(
-                    menu_wanted=menu_instance,
-                    user=request.user,
-                    defaults={'wanted_menu': True}
-                )
+            new_wishlist.save()
 
-                if not created:
-                    wishlist_item.wanted_menu = True
-                    wishlist_item.save()
+            return JsonResponse({'status': 'success', 'message': 'Data berhasil diterima'}, status=201)
+        except Exception as e:
+            print("Error saat memproses data: ", e)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
-                return JsonResponse({'success': True, 'message': 'Menu added to wishlist successfully!'})
-
-            return JsonResponse({'success': False, 'message': 'Invalid data provided.'}, status=400)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'message': 'Invalid JSON format.'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 @csrf_exempt
-@login_required(login_url='/login')
-def update_tried_status_api(request, id):
-    try:
-        data = json.loads(request.body)
-        tried_status = data.get('tried', None)
+def tried_menu_flutter(request, id):
+    if request.method == "POST":
+        # Pastikan user sudah login
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                "status": False,
+                "message": "User is not authenticated"
+            }, status=401)
 
-        menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)
-        if tried_status is not None:
-            menu_item.tried = tried_status
-            menu_item.save()
+        # Ambil objek WishlistMenu yang sesuai
+        try:
+            menu = get_object_or_404(WishlistMenu, pk=id, user=request.user)
+        except WishlistMenu.DoesNotExist:
+            return JsonResponse({
+                "status": False,
+                "message": "Menu not found"
+            }, status=404)
 
-            return JsonResponse({'success': True, 'message': f"Menu marked as {'tried' if tried_status else 'not tried'} successfully!"})
+        # Tandai restoran sebagai "tried"
+        menu.tried = True
+        menu.save()
 
-        return JsonResponse({'success': False, 'message': 'Invalid tried status.'}, status=400)
+        return JsonResponse({
+            "status": True,
+            "message": f"Menu '{menu.menu_wanted}' marked as tried!"
+        })
 
-    except json.JSONDecodeError:
-        return JsonResponse({'success': False, 'message': 'Invalid JSON format.'}, status=400)
-
-@csrf_exempt
-def show_triedmenu_api(request):
-    tried_menus = WishlistMenu.objects.filter(user=request.user, tried=True)
-    tried_data = [
-        {
-            'id': item.id,
-            'menu_name': item.menu_wanted.menu,
-            'restaurant_name': item.menu_wanted.restaurant.name,    
-            'tried': item.tried
-        } for item in tried_menus
-    ]
-
-    return JsonResponse({'tried_menus': tried_data}, safe=False)
-
-@csrf_exempt
-@login_required(login_url='/login')
-def delete_wishlist_api(request, id):
-    menu_item = get_object_or_404(WishlistMenu, pk=id, user=request.user)
-    menu_item.delete()
-    return JsonResponse({'success': True, 'message': 'Menu deleted from wishlist successfully!'})
-
-@login_required(login_url='/login')
-def show_json_api(request):
-    data = WishlistMenu.objects.filter(user=request.user, wanted_menu=True)
-    serialized_data = serializers.serialize("json", data)
-    return JsonResponse({'data': json.loads(serialized_data)})
+    # Jika bukan POST request, kirimkan error
+    return JsonResponse({
+        "status": False,
+        "message": "Invalid request method"
+    }, status=400)
 
 @csrf_exempt
-def get_json_menu_data_api(request):
-    menus = list(Menu.objects.values())
-    return JsonResponse({'menus': menus})
+def delete_wishlist_flutter(request, id):
+    if request.method == "POST":  # Gunakan POST untuk menggantikan DELETE
+        menu = get_object_or_404(WishlistMenu, pk=id, user=request.user)
+        menu.delete()
+        return JsonResponse({"status": True, "message": "Wishlist deleted successfully."})
+    return JsonResponse({"status": False, "message": "Invalid request method."}, status=400)
