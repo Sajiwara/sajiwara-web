@@ -1,4 +1,5 @@
 import json
+import uuid
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -217,4 +218,44 @@ def create_review_flutter(request):
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
-    
+
+@login_required
+def get_user_info(request):
+    user = request.user
+    return JsonResponse({
+        "id": user.id,  # ID pengguna
+        "username": user.username,  # Username pengguna
+    })
+
+@csrf_exempt
+def edit_review_flutter(request, id):
+    try:
+        # Pastikan id adalah UUID
+        uuid_id = uuid.UUID(str(id))
+    except ValueError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid UUID'}, status=400)
+
+    # Ambil review berdasarkan UUID
+    review = get_object_or_404(Review, id=uuid_id)
+
+    if request.method == "POST":
+        print(request.POST)  # Debug data yang dikirimkan
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'success', 'message': 'Review updated successfully'})
+        else:
+            print(form.errors)  # Debug error form
+            return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
+
+@csrf_exempt
+def flutter_delete_review(request, id):
+    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
+        try:
+            review = get_object_or_404(Review, id=id)
+            review.delete()
+            return JsonResponse({'success': True, 'status': 'success', 'message': 'Review deleted successfully!'}, status=200)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    return JsonResponse({'success': False, 'error': 'Invalid method'}, status=405)
+
