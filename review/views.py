@@ -1,4 +1,5 @@
 import json
+import uuid
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -189,32 +190,56 @@ def create_review_flutter(request):
                 restaurant=restaurant,
                 review=review_text
             )
-
-            # Re-fetch reviews to ensure we have the latest data
-            restaurant_reviews = restaurant.reviews.all()
-
-            if not restaurant_reviews:
-                reviews_html = '''
-                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                    <img src="/static/image/sedih-banget.png" alt="No Reviews" class="w-32 h-32 mb-4"/>
-                    <p class="text-center text-gray-600 mt-4">No reviews yet</p>
-                </div>
-                '''
-            else:
-                reviews_html = ""
-                for review in restaurant_reviews:
-                    reviews_html += render_to_string('card_review.html', 
-                        {'review': review}, 
-                        request=request
-                    )
-
             return JsonResponse({
                 'status': 'success',
-                'html': reviews_html
             })
 
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+@login_required
+def get_user_info(request):
+    user = request.user
+    return JsonResponse({
+        "id": user.id,  # ID pengguna
+        "username": user.username,  # Username pengguna
+    })
+
+@csrf_exempt
+def edit_review_flutter(request, id):
+    try:
+        # Pastikan id adalah UUID
+        uuid_id = uuid.UUID(str(id))
+    except ValueError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid UUID'}, status=400)
+
+    # Ambil review berdasarkan UUID
+    review = get_object_or_404(Review, id=uuid_id)
+
+    if request.method == "POST":
+        data = json.loads(request.body)  # Pastikan JSON body diterima
+        review_text = data.get('review_text')
+    if not review_text:
+        return JsonResponse({'status': 'error', 'message': 'Review text is missing'}, status=400)
     
+    form = ReviewForm({'review': review_text}, instance=review)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'status': 'success', 'message': 'Review updated successfully'})
+    else:
+        print(form.errors)  # Debug error form
+        return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
+
+@csrf_exempt
+def flutter_delete_review(request, id):
+    if request.method == 'POST' and request.POST.get('_method') == 'DELETE':
+        try:
+            review = get_object_or_404(Review, id=id)
+            review.delete()
+            return JsonResponse({'success': True, 'status': 'success', 'message': 'Review deleted successfully!'}, status=200)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    return JsonResponse({'success': False, 'error': 'Invalid method'}, status=405)
+

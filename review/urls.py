@@ -12,7 +12,7 @@ urlpatterns = [
     path('jsonResto/', views.show_json_restoran, name='show_json_restoran'),
     path('<uuid:id>/jsonReview/', views.show_json_review, name='show_json_review'),
     path('create-flutter/', views.create_review_flutter, name='create_review_flutter'),
-
-
-
+    path('get-user-info/', views.get_user_info, name='get_user_info'),
+    path('edit-flutter/<uuid:id>/', views.edit_review_flutter, name='edit_review_flutter'),
+    path('delete-flutter/<uuid:id>/', views.flutter_delete_review, name='flutter_delete_review'),
 ]
