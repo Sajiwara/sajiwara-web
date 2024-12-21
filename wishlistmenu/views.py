@@ -104,16 +104,18 @@ def show_json(request):
     # Fetch wishlist items for the logged-in user
     data = WishlistMenu.objects.filter(user=request.user, wanted_menu=True)
     
-    # Modify the data to include the menu name by looking up the corresponding menu object
+    # Modify the data to include the menu name and restaurant details
     wishlist_data = []
     for item in data:
-        # Add the menu name to the response
+        # Add the menu name and restaurant details to the response
         menu_name = item.menu_wanted.menu if item.menu_wanted else None
+        restaurant_name = item.menu_wanted.restaurant.name if item.menu_wanted and item.menu_wanted.restaurant else None
         wishlist_data.append({
             "model": "wishlistmenu.wishlistmenu",
             "pk": str(item.pk),
             "fields": {
                 "menu_wanted": menu_name,  # Instead of ID, return the menu name
+                "restaurant": restaurant_name,  # Include restaurant name
                 "user": item.user.id,
                 "wanted_menu": item.wanted_menu,
                 "tried": item.tried
