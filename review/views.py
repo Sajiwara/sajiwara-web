@@ -148,9 +148,22 @@ def show_json_review(request, id):
     # Mengambil semua review untuk restoran tersebut
     reviews = Review.objects.filter(restaurant=restaurant)
 
+    # Custom serialization
+    reviews_data = []
+    for review in reviews:
+        reviews_data.append({
+            "id": str(review.id),
+            "user": {
+                "id": review.user.id,
+                "username": review.user.username,
+            },
+            "restaurant": str(review.restaurant.id),
+            "review": review.review,
+            "date_posted": review.date_posted.isoformat(),
+        })
+
     # Mengembalikan data dalam format JSON
-    reviews_data = serializers.serialize("json", reviews)
-    return HttpResponse(serializers.serialize("json", reviews), content_type="application/json")
+    return JsonResponse(reviews_data, safe=False)
 
 # @csrf_exempt
 # def create_review_flutter(request):
