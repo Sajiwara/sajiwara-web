@@ -190,28 +190,8 @@ def create_review_flutter(request):
                 restaurant=restaurant,
                 review=review_text
             )
-
-            # Re-fetch reviews to ensure we have the latest data
-            restaurant_reviews = restaurant.reviews.all()
-
-            if not restaurant_reviews:
-                reviews_html = '''
-                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-                    <img src="/static/image/sedih-banget.png" alt="No Reviews" class="w-32 h-32 mb-4"/>
-                    <p class="text-center text-gray-600 mt-4">No reviews yet</p>
-                </div>
-                '''
-            else:
-                reviews_html = ""
-                for review in restaurant_reviews:
-                    reviews_html += render_to_string('card_review.html', 
-                        {'review': review}, 
-                        request=request
-                    )
-
             return JsonResponse({
                 'status': 'success',
-                'html': reviews_html
             })
 
         except Exception as e:
@@ -239,14 +219,18 @@ def edit_review_flutter(request, id):
     review = get_object_or_404(Review, id=uuid_id)
 
     if request.method == "POST":
-        print(request.POST)  # Debug data yang dikirimkan
-        form = ReviewForm(request.POST, instance=review)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'status': 'success', 'message': 'Review updated successfully'})
-        else:
-            print(form.errors)  # Debug error form
-            return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
+        data = json.loads(request.body)  # Pastikan JSON body diterima
+        review_text = data.get('review_text')
+    if not review_text:
+        return JsonResponse({'status': 'error', 'message': 'Review text is missing'}, status=400)
+    
+    form = ReviewForm({'review': review_text}, instance=review)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'status': 'success', 'message': 'Review updated successfully'})
+    else:
+        print(form.errors)  # Debug error form
+        return JsonResponse({'status': 'error', 'message': 'Invalid form data'}, status=400)
 
 @csrf_exempt
 def flutter_delete_review(request, id):
